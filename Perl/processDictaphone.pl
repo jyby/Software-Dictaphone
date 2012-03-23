@@ -12,6 +12,7 @@ my $source="Record/Voice";
 my $destination = "/home/jbarbay/Unison/AudioNotesToProcess/";
 my $movingFiles=1; # 0 for False, 1 for True.
 my $debugLevel=1; # 0=silent, 1=print and run all system calls, 2=only print system calls.
+my $logFile="log";
 
 # + Example of Usage:
 # ./processDictaphone.pl /media/WalkmanSony/ Record/Voice/ ~/Unison/AudioNotesToProcess/
@@ -48,9 +49,14 @@ if ( @ARGV == 0 ) {
 print "Will move and rename '$mount$source' to '$destination'.\n";
 checkSourceCanBeAccessed($mount,$source);
 checkDestinationIsFolder($destination);
+trackNbAudioNotesLeftToRead($destination); # Log nb of audionotes before adding the ones from the dictaphone
 moveVoiceFolder("$mount$source",$destination);
+trackNbAudioNotesLeftToRead($destination); # Log nb of audionotes after adding the ones from the dictaphone
 unmountDictaphone($mount);
 print "\nThat's all folks!\n";
+
+##############################################################################
+
 
 sub jybySystem {    
     my ($string) = shift;
@@ -64,6 +70,8 @@ sub jybySystem {
 	print "\033[1m$string\033[0m";
     }
 }
+
+
 
 sub jybyPrint {
     my ($string) = shift; 
@@ -144,8 +152,97 @@ sub moveVoiceFolder {
     jybySystem("cd '".$source."' && mv * '".$destination.$newFolderName."/' && cd - \n");    
 }
 
+
 sub unmountDictaphone {
     my ($mount) = shift;
     # Umount the dictaphone
     jybySystem("umount '".$mount."'\n");
 }
+
+
+##############################################################################
+
+
+sub trackNbAudioNotesLeftToRead{
+    my $AudioNotes = shift; # repertory containing the audionotes.
+    my $absoluteTime = time;
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+    my $count=estimateNbAudioNotesLeftToRead($AudioNotes);
+    # my $realYear = $year+1900;
+    # my $realMonth = $mon+1;
+    # my $smonth="";
+    # my $smday="";
+
+    # # add a leading zero to the day if less than 10.
+    # if( $mday < 10 ) {
+    # 	$smday = "0".$mday;
+    # } else {
+    # 	$smday = $mday;
+    # }
+    # add a leading zero to the month if less than 10.
+    # if( $realMonth < 10 ) {
+    # 	$smonth = "0".$realMonth;
+    # } else {
+    # 	$smonth = $realMonth;
+    # }
+
+    if( ($debugLevel == 0) | ($debugLevel == 1) ) {
+	if( !(-e "${AudioNotes}${logFile}") ) {
+	    open (LOGFILE, ">${AudioNotes}${logFile}") or die ("Cannot open file ${AudioNotes}${logFile} !!!");
+	    print LOGFILE "# Log produced by the scripts =readWaveFiles.pl= and =processAudioNotes.pl=\n";
+	    print LOGFILE "# ";
+	    print LOGFILE "absoluteTime\t";
+	    print LOGFILE "count\t";
+	    print LOGFILE "yyyy\t";
+	    print LOGFILE "mm-dd\t";
+	    print LOGFILE "hh:mm:ss\t";
+	    print LOGFILE "\n";
+	} else {
+	    open (LOGFILE, ">>${AudioNotes}${logFile}") or die ("Cannot open file ${AudioNotes}${logFile} !!!");
+	}
+	print LOGFILE "$absoluteTime\t";
+	print LOGFILE "$count\t";
+	printf("%u\t",(1900+$year));
+	printf("%02u-%02u\t",($mon+1),$mday);
+	printf("%02u:%02u:%02u\t",$hour,$min,$sec);
+	print LOGFILE "\n";
+	close (LOGFILE);
+    }     
+    if( ($debugLevel == 2) | ($debugLevel == 1) ) {
+	#print "open $AudioNotes$logFile\n";
+	print  "absoluteTime\t";
+	print  "count\t";
+	print  "yyyy\t";
+	print  "mm-dd\t";
+	print  "hh:mm:ss\t";
+	print "\n";
+	print  "$absoluteTime\t";
+	print  "$count\t";
+	printf("%u\t",(1900+$year));
+	printf("%02u-%02u\t",($mon+1),$mday);
+	printf("%02u:%02u:%02u\t",$hour,$min,$sec);
+	print "\n";
+	#print  'close (LOGFILE);\n';
+    } 
+    return $count;
+}
+
+sub estimateNbAudioNotesLeftToRead {
+    my ($topdir) = shift; # repertory containing the audionotes.
+    opendir (DIR, $topdir) ; 
+    my @entries = readdir(DIR);
+    my @dirs = ();
+    my $totalCount = 0;
+    my $e;
+
+    foreach $e (@entries) {
+	if ( -d "$topdir/$e" && $e ne "." && $e ne ".." ) {
+	    $totalCount = $totalCount + estimateNbAudioNotesLeftToRead("$topdir/$e");
+	}
+	elsif ( -f "$topdir/$e"  && ( ($e =~ /\.wav$/) || ($e =~ /\.WAV$/) )  ) {
+	    $totalCount++;
+	}
+    }
+    return $totalCount;
+}
+
