@@ -4,6 +4,7 @@ use warnings;
 use File::stat;            # To get the time and size of a file
 # use Time::localtime;       # localtime works WRONG when including this file???
 # use "sox" linux package to get the application "play" to play wav files
+# install it under debian or ubuntu via the command line "sudo apt-get install sox"
 
 # given no parameter, plays the wav files in the current folder.
 #
@@ -35,8 +36,8 @@ print "# by Jeremy Barbay\n\n";
     
 
 # Recover the parameters: 
-my $source = "/home/jbarbay/Unison/AudioNotesToProcess/";
-my $destination = "/home/jbarbay/ToArchive/AudioNotesArchived/";
+my $source = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
+my $destination = "/home/jbarbay/Unison/References/AudioNotesArchived/";
 my $movingFiles=1; # True
 my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="log";
@@ -175,15 +176,16 @@ sub process_file {
 		# Play file:
 		if( ($debugLevel == 0) ) {
 		    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($stats->ctime); # Creation time.
-		    print "Note ".$f." taken";
-		    printf(" on %u-%02u-%02u",(1900+$year),($mon+1),$mday);
+		    print "Note ".$f;
+		    printf(" in folder %s",$relativePath);
+		    # printf(" taken on %u-%02u-%02u",(1900+$year),($mon+1),$mday);
 		    printf(" at %02u:%02u",$hour,$min);
 		    printf " (of size: %uK)", $filesize;
 		    print ".\n";
 		    system("play -q '".$source.$relativePath.$f."'\n");		
 		} elsif( ($debugLevel == 1) ) {
 		    print "play '".$source.$relativePath.$f."'\n";		
-		    system("play  '".$source.$relativePath.$f."'\n");		
+		    system("play '".$source.$relativePath.$f."'\n");		
 		} elsif ($debugLevel == 2) {
 		    print "play '".$source.$relativePath.$f."'\n";		
 		}
@@ -250,9 +252,9 @@ sub trackNbAudioNotesLeftToRead{
 	print "\n";
 	print  "$absoluteTime\t";
 	print  "$count\t";
-	printf("%u\t",(1900+$year));
-	printf("%02u-%02u\t",($mon+1),$mday);
-	printf("%02u:%02u:%02u\t",$hour,$min,$sec);
+	print LOGFILE sprintf("%u\t",(1900+$year));
+	print LOGFILE sprintf("%02u-%02u\t",($mon+1),$mday);
+	print LOGFILE sprintf("%02u:%02u:%02u\t",$hour,$min,$sec);
 	print "\n";
 	print  'close (LOGFILE);\n';
     } 
