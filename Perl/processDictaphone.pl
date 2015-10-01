@@ -7,11 +7,12 @@ use File::stat;            # To get the time and size of a file
 # + Given three parameters $mount, $source and $destination, rename and move the
 # folder $mount$source to $destination and unmount $mount.
 # + Given less parameters, take default values from right to left:
-my $mount="/media/WALKMAN/";
+my $mount="/media/usb0/";
+# Following instructions from http://askubuntu.com/questions/342319/where-are-mtp-mounted-devices-located-in-the-filesystem to find where the mtp mount point is :(
 my $source="Record/Voice";
-my $destination = "/home/jbarbay/Unison/AudioNotesToProcess/";
+my $destination = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $movingFiles=1; # 0 for False, 1 for True.
-my $debugLevel=1; # 0=silent, 1=print and run all system calls, 2=only print system calls.
+my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="log";
 
 # + Example of Usage:
@@ -20,17 +21,14 @@ my $logFile="log";
 print "# Perl Script to Back-up audionotes from any USB dictaphone.\n";
 print "# by Jeremy Barbay\n\n";
     
-
 # Recover the parameters: 
 if ( @ARGV == 0 ) {
     if( -e "/media/FUJITEL" ) {
 	$mount="/media/FUJITEL/";
 	$source="Record/";
-	$destination = "/home/jbarbay/Unison/AudioNotesToProcess/";
     } elsif( -e "/media/WALKMANSONY" ) {
 	$mount="/media/WALKMANSONY/";
 	$source="Record/Voice/";
-	$destination = "/home/jbarbay/Unison/AudioNotesToProcess/";
     }
 } elsif ( @ARGV == 1 ) {
     $mount = shift;
@@ -46,13 +44,20 @@ if ( @ARGV == 0 ) {
 }
 
 
-print "Will move and rename '$mount$source' to '$destination'.\n";
 checkSourceCanBeAccessed($mount,$source);
 checkDestinationIsFolder($destination);
+
+my $nbAudioNotesOnDictaphone = estimateNbAudioNotesLeftToRead("$mount$source");
+my $nbAudioNotesOnComputer = estimateNbAudioNotesLeftToRead($destination);
+my $nbAudioNotesToProcess = $nbAudioNotesOnDictaphone + $nbAudioNotesOnComputer;
+print "Will move $nbAudioNotesOnDictaphone audionotes from '$mount$source' to '$destination'.\n";
+
 trackNbAudioNotesLeftToRead($destination); # Log nb of audionotes before adding the ones from the dictaphone
-moveVoiceFolder("$mount$source",$destination);
+moveAndRenameWavFilesInVoiceFolder("$mount$source",$destination);
+# moveVoiceFolder("$mount$source",$destination);
 trackNbAudioNotesLeftToRead($destination); # Log nb of audionotes after adding the ones from the dictaphone
 unmountDictaphone($mount);
+print "There are now $nbAudioNotesToProcess audionotes left to process.\n";
 print "\nThat's all folks!\n";
 
 ##############################################################################
@@ -70,8 +75,6 @@ sub jybySystem {
 	print "\033[1m$string\033[0m";
     }
 }
-
-
 
 sub jybyPrint {
     my ($string) = shift; 
@@ -102,6 +105,108 @@ sub checkDestinationIsFolder {
 	jybyPrint("Folder '".$destination."' does not exist, creating it.\n");
 	jybySystem("mkdir '".$destination."'\n");
     }
+}
+
+
+
+sub moveAndRenameOneWavFile {
+    my ($source) = shift;                 # file to process
+    my ($destination) = shift;            # relative path
+# Move the .wav file "$source" to the folder $destination, and rename it according to its modification date.
+
+    jybyPrint("Move the .wav file $source to the folder $destination, and rename it according to its modification date.\n");
+    
+    # Recover statistics:
+    my $stats = stat($source) or die "Error while recovering stats: $!!\n";
+    my $cdate = localtime($stats->ctime);
+    jybyPrint("Creation Time of $source\t: ".$cdate."\n");
+    my $mdate = localtime($stats->mtime);
+    jybyPrint("Modif Time of $source\t: ".$mdate."\n");
+    my $adate = localtime($stats->atime);
+    jybyPrint("Access Time of $source\t: ".$adate."\n");
+    my $backupDate = localtime();
+    jybyPrint("Back-up Time (today)\t: ".$backupDate."\n");
+    
+    # Parse supposing $mdate follows the format "Sun Nov 28 06:25:26 2010" 
+    my ($wday, $tmonth, $mday, $hour, $min, $sec, $year) 
+	= ($mdate =~ /(\w+)\s+(\w+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\d+)/) 
+	or die("Problem parsing modification date: $!!\n");
+    
+    # translate textual month into digital value:
+    my %mon2num = qw(jan 01 feb 02 mar 03 apr 04 may 05 jun 06 jul 07 aug 08 sep 09 oct 10 nov 11 dec 12); 
+    my $month = $mon2num{ lc substr($tmonth, 0, 3) };
+    
+    # add a leading zero to the day if less than 10.
+    my $smday = "";
+    if( $mday < 10 ) {
+	$smday = "0".$mday;
+    } else {
+	$smday = $mday;
+    }
+    
+    # Build new name of File:
+    my $baseNewFileName = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec."";
+    my $newFileName = $baseNewFileName.".wav";
+    my $version = 0;
+    while( -e $source.$newFileName) {
+	$version = $version+1;
+	$newFileName = $baseNewFileName."v".$version.".wav";
+    }
+    
+    # Move and rename the wave file to the folder $destination :
+    jybySystem("mv $source ".$destination."/".$newFileName."\n");    
+}
+
+sub moveAndRenameWavFilesInVoiceFolder {
+    my ($source) = shift;                 # file to process
+    my ($destination) = shift;            # relative path
+# Create in $destination a folder named according to the current (backup) date, and move there and rename the audionotes from $source.
+
+    jybyPrint("Create in $destination a folder named according to the current (backup) date, and move there and rename the audionotes from $source.\n");
+    
+    # Recover statistics:
+    my $backupDate = localtime();
+    jybyPrint("Back-up Time (today)\t: ".$backupDate."\n");
+    
+    # Parse the back-up date supposing it follows the format "Sun Nov 28 06:25:26 2010" 
+    my ($wday, $tmonth, $mday, $hour, $min, $sec, $year) 
+	= ($backupDate =~ /(\w+)\s+(\w+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\d+)/) 
+	or die("Problem parsing modification date: $!!\n");
+    
+    # translate textual month into digital value:
+    my %mon2num = qw(jan 01 feb 02 mar 03 apr 04 may 05 jun 06 jul 07 aug 08 sep 09 oct 10 nov 11 dec 12); 
+    my $month = $mon2num{ lc substr($tmonth, 0, 3) };
+    
+    # add a leading zero to the day if less than 10.
+    my $smday = "";
+    if( $mday < 10 ) {
+	$smday = "0".$mday;
+    } else {
+	$smday = $mday;
+    }
+    
+    # Create new folder, named after current date:
+    my $baseNewFolderName = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec."";
+    my $newFolderName = $baseNewFolderName;
+    my $version = 0;
+    while( -e $source.$newFolderName) {
+	$version = $version+1;
+	$newFolderName = $baseNewFolderName." version ".$version;
+    }
+    jybySystem("mkdir '".$destination.$newFolderName."'\n");
+    
+    # Move the content of the source folder to the folder $destination/$newFolderName :
+    opendir (DIR, $source) ; 
+    my @entries = readdir(DIR);
+    my @dirs = ();
+    my $e;
+
+    foreach $e (@entries) {
+	if ( -f "$source/$e"  && ( ($e =~ /\.wav$/) || ($e =~ /\.WAV$/) )  ) {
+	    moveAndRenameOneWavFile("$source/$e","$destination$newFolderName");
+	}
+    }
+
 }
 
 
@@ -156,7 +261,7 @@ sub moveVoiceFolder {
 sub unmountDictaphone {
     my ($mount) = shift;
     # Umount the dictaphone
-    jybySystem("umount '".$mount."'\n");
+    jybySystem("sudo umount '".$mount."'\n");
 }
 
 
@@ -168,24 +273,7 @@ sub trackNbAudioNotesLeftToRead{
     my $absoluteTime = time;
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
     my $count=estimateNbAudioNotesLeftToRead($AudioNotes);
-    # my $realYear = $year+1900;
-    # my $realMonth = $mon+1;
-    # my $smonth="";
-    # my $smday="";
-
-    # # add a leading zero to the day if less than 10.
-    # if( $mday < 10 ) {
-    # 	$smday = "0".$mday;
-    # } else {
-    # 	$smday = $mday;
-    # }
-    # add a leading zero to the month if less than 10.
-    # if( $realMonth < 10 ) {
-    # 	$smonth = "0".$realMonth;
-    # } else {
-    # 	$smonth = $realMonth;
-    # }
-
+    
     if( ($debugLevel == 0) | ($debugLevel == 1) ) {
 	if( !(-e "${AudioNotes}${logFile}") ) {
 	    open (LOGFILE, ">${AudioNotes}${logFile}") or die ("Cannot open file ${AudioNotes}${logFile} !!!");
@@ -202,9 +290,9 @@ sub trackNbAudioNotesLeftToRead{
 	}
 	print LOGFILE "$absoluteTime\t";
 	print LOGFILE "$count\t";
-	printf("%u\t",(1900+$year));
-	printf("%02u-%02u\t",($mon+1),$mday);
-	printf("%02u:%02u:%02u\t",$hour,$min,$sec);
+	print LOGFILE sprintf("%u\t",(1900+$year));
+	print LOGFILE sprintf("%02u-%02u\t",($mon+1),$mday);
+	print LOGFILE sprintf("%02u:%02u:%02u\t",$hour,$min,$sec);
 	print LOGFILE "\n";
 	close (LOGFILE);
     }     
