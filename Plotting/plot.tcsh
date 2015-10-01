@@ -1,1 +1,1 @@
-gnuplot -persist < nbAudioNotesOverTime.gnuplot
+gnuplot -persist < ~/Desktop/AudioNotesToProcess/nbAudioNotesOverTime.gnuplot
