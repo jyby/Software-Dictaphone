@@ -13,7 +13,7 @@ my $mount="/media/usb0/";
 my $source="Record/Voice";
 my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/FilesToPutOnDictaphone";
-my $debugLevel=1; # 0=silent, 1=print and run all system calls, 2=only print system calls.
+my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="log";
 
 # + Example of Usage:
@@ -21,7 +21,7 @@ my $logFile="log";
 
 print "# Perl Script to Back-up audionotes from any USB dictaphone.\n";
 print "# by Jeremy Barbay\n\n";
-print "# Version last modified on [2016-05-27 Fri 05:17] \n\n";
+print "# Version last modified on [2016-05-27 Fri 10:21] \n\n";
     
 
 # Recover the parameters: 
@@ -49,12 +49,13 @@ if ( @ARGV == 0 ) {
 }
 
 
-print "Will move and rename '$mount$source' to '$audioNotesFolderOnComputer'.\n";
+print "\nMoving and renaming '$mount$source' to '$audioNotesFolderOnComputer'.\n";
 checkSourceCanBeAccessed($mount,$source);
 checkDestinationIsFolder($audioNotesFolderOnComputer);
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes before adding the ones from the dictaphone
 # moveVoiceFolder("$mount$source",$destination);
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes after adding the ones from the dictaphone
+print "\nRSynching files in '$dataFolderOnComputer' to '$mount'.\n";
 updateContentOfDictaphone($dataFolderOnComputer,$mount);
 unmountDictaphone($mount);
 print "\nThat's all folks!\n";
@@ -259,9 +260,13 @@ sub updateContentOfDictaphone {
     my ($dataFolderOnComputer) = shift;
     my ($mount) = shift; 
     if( $debugLevel == 0 ) {
-      jybySystem("rsynch -r $dataFolderOnComputer/* $mount \n")
+	jybySystem("rsync $dataFolderOnComputer/*.txt $mount \n");
+	jybySystem("rsync $dataFolderOnComputer/ImportantPapers/* $mount \n");
+	jybySystem("rsync $dataFolderOnComputer/Transfer/* $mount \n");
     } elsif( $debugLevel > 0 ) {
-      jybySystem("rsync -vr $dataFolderOnComputer/* $mount \n")
+	jybySystem("rsync -v $dataFolderOnComputer/*.txt $mount \n");
+	jybySystem("rsync -v $dataFolderOnComputer/ImportantPapers/* $mount \n");
+	jybySystem("rsync -v $dataFolderOnComputer/Transfer/* $mount \n");
     }
 }
 
