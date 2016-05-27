@@ -77,10 +77,7 @@ sub jybySystem {
 
 sub jybyPrint {
     my ($string) = shift; 
-    if( $debugLevel == 0 ) {
-    } elsif( $debugLevel == 1 ) {
-	print($string);
-    } elsif( $debugLevel == 2 ) {
+    if( $debugLevel > 0 ) {
 	print($string);
     }
 }
