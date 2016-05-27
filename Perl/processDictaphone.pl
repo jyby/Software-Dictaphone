@@ -4,13 +4,16 @@ use warnings;
 use File::stat;            # To get the time and size of a file
 # use Time::localtime;       # localtime works WRONG when including this file???
 
-# + Given three parameters $mount, $source and $destination, rename and move the
-# folder $mount$source to $destination and unmount $mount.
+# + Given four parameters $mount, $source, $audioNotesFolderOnComputer and $dataFolderOnComputer,
+# + - rename and move the folder $mount$source to $audioNotesFolderOnComputer,
+# + - rsynch the content of the folder $dataFolderOnComputer to the root of the dictaphone, and
+# + - unmount $mount.
 # + Given less parameters, take default values from right to left:
-my $mount="/media/WALKMAN/";
+my $mount="/media/usb0/";
 my $source="Record/Voice";
-my $destination = "/home/jbarbay/Unison/AudioNotesToProcess/";
-my $movingFiles=1; # 0 for False, 1 for True.
+my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
+my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/FilesToPutOnDictaphone";
+my $movingFiles=0; # 0 for False, 1 for True.
 my $debugLevel=1; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="log";
 
@@ -27,11 +30,11 @@ if ( @ARGV == 0 ) {
     if( -e "/media/FUJITEL" ) {
 	$mount="/media/FUJITEL/";
 	$source="Record/";
-	$destination = "/home/jbarbay/Unison/AudioNotesToProcess/";
+	$audioNotesFolderOnComputer = "/home/jbarbay/Unison/AudioNotesToProcess/";
     } elsif( -e "/media/WALKMANSONY" ) {
 	$mount="/media/WALKMANSONY/";
 	$source="Record/Voice/";
-	$destination = "/home/jbarbay/Unison/AudioNotesToProcess/";
+	$audioNotesFolderOnComputer = "/home/jbarbay/Unison/AudioNotesToProcess/";
     }
 } elsif ( @ARGV == 1 ) {
     $mount = shift;
@@ -41,23 +44,25 @@ if ( @ARGV == 0 ) {
 } elsif ( @ARGV == 3 ) {
     $mount = shift;
     $source = shift;
-    $destination = shift;
+    $audioNotesFolderOnComputer = shift;
 }  else {
     die("Error with parameters (please read header in script)\n");
 }
 
 
-print "Will move and rename '$mount$source' to '$destination'.\n";
+print "Will move and rename '$mount$source' to '$audioNotesFolderOnComputer'.\n";
 checkSourceCanBeAccessed($mount,$source);
-checkDestinationIsFolder($destination);
-trackNbAudioNotesLeftToRead($destination); # Log nb of audionotes before adding the ones from the dictaphone
-moveVoiceFolder("$mount$source",$destination);
-trackNbAudioNotesLeftToRead($destination); # Log nb of audionotes after adding the ones from the dictaphone
+checkDestinationIsFolder($audioNotesFolderOnComputer);
+trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes before adding the ones from the dictaphone
+moveVoiceFolder("$mount$source",$audioNotesFolderOnComputer);
+trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes after adding the ones from the dictaphone
+
+updateContentOfDictaphone($dataFolderOnComputer,$mount);
+
 unmountDictaphone($mount);
 print "\nThat's all folks!\n";
 
 ##############################################################################
-
 
 sub jybySystem {    
     my ($string) = shift;
@@ -71,8 +76,6 @@ sub jybySystem {
 	print "\033[1m$string\033[0m";
     }
 }
-
-
 
 sub jybyPrint {
     my ($string) = shift; 
@@ -153,6 +156,15 @@ sub moveVoiceFolder {
     jybySystem("cd '".$source."' && mv * '".$destination.$newFolderName."/' && cd - \n");    
 }
 
+sub updateContentOfDictaphone {
+    my ($dataFolderOnComputer) = shift;
+    my ($mount) = shift; 
+    if( $debugLevel == 0 ) {
+      jybySystem("rsynch -r $dataFolderOnComputer/* $mount \n")
+    } elsif( $debugLevel > 0 ) {
+      jybySystem("rsync -vr $dataFolderOnComputer/* $mount \n")
+    }
+}
 
 sub unmountDictaphone {
     my ($mount) = shift;
