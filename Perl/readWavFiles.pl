@@ -31,7 +31,7 @@ use File::stat;            # To get the time and size of a file
 
 
 print "# Perl Script to process audionotes from a jukebox SONY.\n";
-print "# by Jeremy Barbay\n\n";c
+print "# by Jeremy Barbay\n\n";
 print "# Version last modified on [2016-05-27 Fri] \n\n";
     
     
