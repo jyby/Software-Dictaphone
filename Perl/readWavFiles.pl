@@ -35,8 +35,8 @@ print "# by Jeremy Barbay\n\n";
     
 
 # Recover the parameters: 
-my $source = "/home/jbarbay/Unison/AudioNotesToProcess/";
-my $destination = "/home/jbarbay/ToArchive/AudioNotesArchived/";
+my $source = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
+my $destination = "/home/jbarbay/Unison/References/AudioNotesArchived/";
 my $movingFiles=1; # True
 my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="log";
