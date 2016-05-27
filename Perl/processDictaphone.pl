@@ -53,11 +53,9 @@ print "Will move and rename '$mount$source' to '$audioNotesFolderOnComputer'.\n"
 checkSourceCanBeAccessed($mount,$source);
 checkDestinationIsFolder($audioNotesFolderOnComputer);
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes before adding the ones from the dictaphone
-moveVoiceFolder("$mount$source",$audioNotesFolderOnComputer);
+# moveVoiceFolder("$mount$source",$destination);
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes after adding the ones from the dictaphone
-
 updateContentOfDictaphone($dataFolderOnComputer,$mount);
-
 unmountDictaphone($mount);
 print "\nThat's all folks!\n";
 
@@ -108,6 +106,107 @@ sub checkDestinationIsFolder {
 }
 
 
+sub moveAndRenameOneWavFile {
+    my ($source) = shift;                 # file to process
+    my ($destination) = shift;            # relative path
+# Move the .wav file "$source" to the folder $destination, and rename it according to its modification date.
+
+    jybyPrint("Move the .wav file $source to the folder $destination, and rename it according to its modification date.\n");
+    
+    # Recover statistics:
+    my $stats = stat($source) or die "Error while recovering stats: $!!\n";
+    my $cdate = localtime($stats->ctime);
+    jybyPrint("Creation Time of $source\t: ".$cdate."\n");
+    my $mdate = localtime($stats->mtime);
+    jybyPrint("Modif Time of $source\t: ".$mdate."\n");
+    my $adate = localtime($stats->atime);
+    jybyPrint("Access Time of $source\t: ".$adate."\n");
+    my $backupDate = localtime();
+    jybyPrint("Back-up Time (today)\t: ".$backupDate."\n");
+    
+    # Parse supposing $mdate follows the format "Sun Nov 28 06:25:26 2010" 
+    my ($wday, $tmonth, $mday, $hour, $min, $sec, $year) 
+	= ($mdate =~ /(\w+)\s+(\w+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\d+)/) 
+	or die("Problem parsing modification date: $!!\n");
+    
+    # translate textual month into digital value:
+    my %mon2num = qw(jan 01 feb 02 mar 03 apr 04 may 05 jun 06 jul 07 aug 08 sep 09 oct 10 nov 11 dec 12); 
+    my $month = $mon2num{ lc substr($tmonth, 0, 3) };
+    
+    # add a leading zero to the day if less than 10.
+    my $smday = "";
+    if( $mday < 10 ) {
+	$smday = "0".$mday;
+    } else {
+	$smday = $mday;
+    }
+    
+    # Build new name of File:
+    my $baseNewFileName = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec."";
+    my $newFileName = $baseNewFileName.".wav";
+    my $version = 0;
+    while( -e $source.$newFileName) {
+	$version = $version+1;
+	$newFileName = $baseNewFileName."v".$version.".wav";
+    }
+    
+    # Move and rename the wave file to the folder $destination :
+    jybySystem("mv $source ".$destination."/".$newFileName."\n");    
+}
+
+sub moveAndRenameWavFilesInVoiceFolder {
+    my ($source) = shift;                 # file to process
+    my ($destination) = shift;            # relative path
+# Create in $destination a folder named according to the current (backup) date, and move there and rename the audionotes from $source.
+
+    jybyPrint("Create in $destination a folder named according to the current (backup) date, and move there and rename the audionotes from $source.\n");
+    
+    # Recover statistics:
+    my $backupDate = localtime();
+    jybyPrint("Back-up Time (today)\t: ".$backupDate."\n");
+    
+    # Parse the back-up date supposing it follows the format "Sun Nov 28 06:25:26 2010" 
+    my ($wday, $tmonth, $mday, $hour, $min, $sec, $year) 
+	= ($backupDate =~ /(\w+)\s+(\w+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\d+)/) 
+	or die("Problem parsing modification date: $!!\n");
+    
+    # translate textual month into digital value:
+    my %mon2num = qw(jan 01 feb 02 mar 03 apr 04 may 05 jun 06 jul 07 aug 08 sep 09 oct 10 nov 11 dec 12); 
+    my $month = $mon2num{ lc substr($tmonth, 0, 3) };
+    
+    # add a leading zero to the day if less than 10.
+    my $smday = "";
+    if( $mday < 10 ) {
+	$smday = "0".$mday;
+    } else {
+	$smday = $mday;
+    }
+    
+    # Create new folder, named after current date:
+    my $baseNewFolderName = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec."";
+    my $newFolderName = $baseNewFolderName;
+    my $version = 0;
+    while( -e $source.$newFolderName) {
+	$version = $version+1;
+	$newFolderName = $baseNewFolderName." version ".$version;
+    }
+    jybySystem("mkdir '".$destination.$newFolderName."'\n");
+    
+    # Move the content of the source folder to the folder $destination/$newFolderName :
+    opendir (DIR, $source) ; 
+    my @entries = readdir(DIR);
+    my @dirs = ();
+    my $e;
+
+    foreach $e (@entries) {
+	if ( -f "$source/$e"  && ( ($e =~ /\.wav$/) || ($e =~ /\.WAV$/) )  ) {
+	    moveAndRenameOneWavFile("$source/$e","$destination$newFolderName");
+	}
+    }
+
+}
+
+
 sub moveVoiceFolder {
     my ($source) = shift;                 # file to process
     my ($destination) = shift;      # relative path
@@ -154,6 +253,7 @@ sub moveVoiceFolder {
     jybySystem("mkdir '".$destination.$newFolderName."'\n");
     jybySystem("cd '".$source."' && mv * '".$destination.$newFolderName."/' && cd - \n");    
 }
+
 
 sub updateContentOfDictaphone {
     my ($dataFolderOnComputer) = shift;
