@@ -19,6 +19,7 @@ my $logFile="log";
 
 print "# Perl Script to Back-up audionotes from any USB dictaphone.\n";
 print "# by Jeremy Barbay\n\n";
+print "# Version last modified on [2016-05-27 Fri 05:17] \n\n";
     
 
 # Recover the parameters: 
