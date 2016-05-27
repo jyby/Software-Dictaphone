@@ -13,7 +13,6 @@ my $mount="/media/usb0/";
 my $source="Record/Voice";
 my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/FilesToPutOnDictaphone";
-my $movingFiles=0; # 0 for False, 1 for True.
 my $debugLevel=1; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="log";
 
@@ -169,7 +168,7 @@ sub updateContentOfDictaphone {
 sub unmountDictaphone {
     my ($mount) = shift;
     # Umount the dictaphone
-    jybySystem("umount '".$mount."'\n");
+    jybySystem("sudo umount '".$mount."'\n");
 }
 
 
