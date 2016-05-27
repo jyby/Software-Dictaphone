@@ -316,9 +316,9 @@ sub trackNbAudioNotesLeftToRead{
 	}
 	print LOGFILE "$absoluteTime\t";
 	print LOGFILE "$count\t";
-	printf("%u\t",(1900+$year));
-	printf("%02u-%02u\t",($mon+1),$mday);
-	printf("%02u:%02u:%02u\t",$hour,$min,$sec);
+	printf(LOGFILE  "%u\t",(1900+$year));
+	printf(LOGFILE  "%02u-%02u\t",($mon+1),$mday);
+	printf(LOGFILE  "%02u:%02u:%02u\t",$hour,$min,$sec);
 	print LOGFILE "\n";
 	close (LOGFILE);
     }     
