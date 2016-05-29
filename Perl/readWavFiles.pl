@@ -177,7 +177,7 @@ sub process_file {
 		# Play file:
 		if( ($debugLevel == 0) ) {
 		    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($stats->ctime); # Creation time.
-		    print "Note ".$f." taken";
+		    print "Note ".$f." archived";
 		    printf(" on %u-%02u-%02u",(1900+$year),($mon+1),$mday);
 		    printf(" at %02u:%02u",$hour,$min);
 		    printf " (of size: %uK)", $filesize;
