@@ -12,7 +12,7 @@ use File::stat;            # To get the time and size of a file
 my $mount="/media/usb0/";
 my $source="Record/Voice";
 my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
-my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/FilesToPutOnDictaphone";
+my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/Dictaphones";
 my $debugLevel=1; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="log";
 
@@ -257,13 +257,9 @@ sub updateContentOfDictaphone {
     my ($dataFolderOnComputer) = shift;
     my ($mount) = shift; 
     if( $debugLevel == 0 ) {
-	jybySystem("rsync -c $dataFolderOnComputer/*.txt $mount \n");
-	jybySystem("rsync -c $dataFolderOnComputer/ImportantPapers/* $mount \n");
-	jybySystem("rsync -c $dataFolderOnComputer/Transfer/* $mount \n");
+	jybySystem("rsync -cr $dataFolderOnComputer/ $mount \n");
     } elsif( $debugLevel > 0 ) {
-	jybySystem("rsync -vc $dataFolderOnComputer/*.txt $mount \n");
-	jybySystem("rsync -vc $dataFolderOnComputer/ImportantPapers/* $mount \n");
-	jybySystem("rsync -vc $dataFolderOnComputer/Transfer/* $mount \n");
+	jybySystem("rsync -vcr $dataFolderOnComputer/ $mount \n");
     }
 }
 
