@@ -13,8 +13,9 @@ my $mount="/media/usb0/";
 my $source="Record/Voice";
 my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/Dictaphones";
-my $debugLevel=1; # 0=silent, 1=print and run all system calls, 2=only print system calls.
+my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="log";
+my $maxSizeTransferEnMegabytes = 2048;
 
 # + Example of Usage:
 # ./processDictaphone.pl /media/WalkmanSony/ Record/Voice/ ~/Unison/AudioNotesToProcess/
@@ -57,6 +58,7 @@ moveVoiceFolder("$mount$source",$audioNotesFolderOnComputer);
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes after adding the ones from the dictaphone
 print "\nRSynching files in '$dataFolderOnComputer' to '$mount'.\n";
 updateContentOfDictaphone($dataFolderOnComputer,$mount);
+printSpaceLeftOnDevice($mount);
 unmountDictaphone($mount);
 print "\nThat's all folks!\n";
 
@@ -80,6 +82,12 @@ sub jybyPrint {
     if( $debugLevel > 0 ) {
 	print($string);
     }
+}
+
+sub printSpaceLeftOnDevice {
+    my ($mount) = shift;
+    print ("Space available on the device:\n");	
+    jybySystem("df -h $mount\n");
 }
 
 sub checkSourceCanBeAccessed {
@@ -319,7 +327,7 @@ sub trackNbAudioNotesLeftToRead{
 	close (LOGFILE);
     }     
     if( ($debugLevel == 2) | ($debugLevel == 1) ) {
-	#print "open $AudioNotes$logFile\n";
+	print "open $AudioNotes$logFile and log the following entry:\n";
 	print  "absoluteTime\t";
 	print  "count\t";
 	print  "yyyy\t";
