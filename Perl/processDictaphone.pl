@@ -53,9 +53,14 @@ if ( @ARGV == 0 ) {
 print "\nMoving and renaming '$mount$source' to '$audioNotesFolderOnComputer'.\n";
 checkSourceCanBeAccessed($mount,$source);
 checkDestinationIsFolder($audioNotesFolderOnComputer);
+my $nbAudioNotesOnDictaphone = estimateNbAudioNotesLeftToRead("$mount$source");
+my $nbAudioNotesOnComputer = estimateNbAudioNotesLeftToRead($audioNotesFolderOnComputer);
+my $nbAudioNotesToProcess = $nbAudioNotesOnDictaphone + $nbAudioNotesOnComputer;
+my $estimatedProcessingTime = $nbAudioNotesToProcess*2;
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes before adding the ones from the dictaphone
 moveVoiceFolder("$mount$source",$audioNotesFolderOnComputer);
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes after adding the ones from the dictaphone
+printTimeRequiredToProcessAudioNotes($nbAudioNotesToProcess);
 print "\nRSynching files in '$dataFolderOnComputer' to '$mount'.\n";
 updateContentOfDictaphone($dataFolderOnComputer,$mount);
 printSpaceLeftOnDevice($mount);
@@ -83,6 +88,29 @@ sub jybyPrint {
 	print($string);
     }
 }
+
+sub printTimeRequiredToProcessAudioNotes {
+    my ($nbAudioNotesToProcess) = shift;
+    print "There are now $nbAudioNotesToProcess audionotes left to process, ";
+    print "which can be processed in at most ";
+    if( $estimatedProcessingTime<60 ) {
+	print "$estimatedProcessingTime mns.\n";
+    } else {
+	my $estimatedProcessingTimeInHours = int($estimatedProcessingTime / 60);
+	my $estimatedProcessingTimeRemain = $estimatedProcessingTime % 60;
+	if($estimatedProcessingTimeInHours == 1) {
+	    print "1 hour";
+	} else {
+	    print "$estimatedProcessingTimeInHours hours";
+	}
+	if($estimatedProcessingTimeRemain > 0) {
+	    print " and $estimatedProcessingTimeRemain mns.\n";
+	} else {
+	    print ".\n";
+	}
+    }
+}
+    
 
 sub printSpaceLeftOnDevice {
     my ($mount) = shift;
