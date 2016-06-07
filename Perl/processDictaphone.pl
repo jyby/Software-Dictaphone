@@ -22,7 +22,7 @@ my $maxSizeTransferEnMegabytes = 2048;
 
 print "# Perl Script to Back-up audionotes from any USB dictaphone.\n";
 print "# by Jeremy Barbay\n\n";
-print "# Version last modified on [2016-05-27 Fri 10:21] \n\n";
+print "# Version last modified on [2016-06-07 Tue] \n\n";
     
 
 # Recover the parameters: 
@@ -50,20 +50,23 @@ if ( @ARGV == 0 ) {
 }
 
 
-print "\nMoving and renaming '$mount$source' to '$audioNotesFolderOnComputer'.\n";
+print "\nProcessing '$mount$source' to '$audioNotesFolderOnComputer'.\n";
 checkSourceCanBeAccessed($mount,$source);
 checkDestinationIsFolder($audioNotesFolderOnComputer);
 my $nbAudioNotesOnDictaphone = estimateNbAudioNotesLeftToRead("$mount$source");
 my $nbAudioNotesOnComputer = estimateNbAudioNotesLeftToRead($audioNotesFolderOnComputer);
 my $nbAudioNotesToProcess = $nbAudioNotesOnDictaphone + $nbAudioNotesOnComputer;
 my $estimatedProcessingTime = $nbAudioNotesToProcess*2;
+print "Will move $nbAudioNotesOnDictaphone audionotes from '$mount$source' to '$audioNotesFolderOnComputer'.\n";
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes before adding the ones from the dictaphone
-moveVoiceFolder("$mount$source",$audioNotesFolderOnComputer);
+moveAndRenameWavFilesInVoiceFolder("$mount$source",$audioNotesFolderOnComputer);
+# moveVoiceFolder("$mount$source",$audioNotesFolderOnComputer);
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes after adding the ones from the dictaphone
 printTimeRequiredToProcessAudioNotes($nbAudioNotesToProcess);
 print "\nRSynching files in '$dataFolderOnComputer' to '$mount'.\n";
 updateContentOfDictaphone($dataFolderOnComputer,$mount);
 printSpaceLeftOnDevice($mount);
+# Umount the Dictaphone
 unmountDictaphone($mount);
 print "\nThat's all folks!\n";
 
