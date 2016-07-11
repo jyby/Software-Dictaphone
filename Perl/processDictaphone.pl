@@ -13,7 +13,7 @@ my $mount="/media/usb0/";
 my $source="Record/Voice";
 my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/Dictaphones";
-my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
+my $debugLevel=1; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="log";
 my $maxSizeTransferEnMegabytes = 2048;
 
@@ -142,6 +142,29 @@ sub checkDestinationIsFolder {
     }
 }
 
+sub compactDateFormat {
+    my ($date) = shift;
+    
+    my ($wday, $tmonth, $mday, $hour, $min, $sec, $year) 
+	= ($date =~ /(\w+)\s+(\w+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\d+)/) 
+	or die("Problem parsing date: $!!\n");
+    
+    # translate textual month into digital value:
+    my %mon2num = qw(jan 01 feb 02 mar 03 apr 04 may 05 jun 06 jul 07 aug 08 sep 09 oct 10 nov 11 dec 12); 
+    my $month = $mon2num{ lc substr($tmonth, 0, 3) };
+    
+    # add a leading zero to the day if less than 10.
+    my $smday = "";
+    if( $mday < 10 ) {
+	$smday = "0".$mday;
+    } else {
+	$smday = $mday;
+    }
+    
+    # Create new folder, named after current date:
+    my $compactformat = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec."";
+    return $compactformat;
+}
 
 sub moveAndRenameOneWavFile {
     my ($source) = shift;                 # file to process
@@ -177,20 +200,27 @@ sub moveAndRenameOneWavFile {
     } else {
 	$smday = $mday;
     }
-    
+
     # Build new name of File:
-    my $baseNewFileName = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec."";
-    my $newFileName = $baseNewFileName.".wav";
+    my $baseNewFileName = ""; 
+    if( $month == 1 && $mday == 1 && $hour == 1 && $min == 0 && $sec == 0 ) {
+      $baseNewFileName = compactDateFormat($backupDate)."_backup";
+      jybyPrint("Dictaphone without date: Using backupDate '".$baseNewFileName."' instead.\n");
+    } else  {
+      $baseNewFileName = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec;
+    }
+    # Build new name of File:
+    my $newFileName = $baseNewFileName."_audioNote".".wav";
     my $version = 1;
     while( -e $destination."/".$newFileName) {
         jybyPrint("Increment the version number as '".$destination."/".$newFileName."' already exists.\n");
 	$version = $version+1;
 	$newFileName = $baseNewFileName."v".$version.".wav";
     }
-    
     # Move and rename the wave file to the folder $destination :
     jybySystem("mv $source ".$destination."/".$newFileName."\n");    
 }
+
 
 sub moveAndRenameWavFilesInVoiceFolder {
     my ($source) = shift;                 # file to process
