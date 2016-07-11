@@ -181,8 +181,9 @@ sub moveAndRenameOneWavFile {
     # Build new name of File:
     my $baseNewFileName = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec."";
     my $newFileName = $baseNewFileName.".wav";
-    my $version = 0;
-    while( -e $source.$newFileName) {
+    my $version = 1;
+    while( -e $destination."/".$newFileName) {
+        jybyPrint("Increment the version number as '".$destination."/".$newFileName."' already exists.\n");
 	$version = $version+1;
 	$newFileName = $baseNewFileName."v".$version.".wav";
     }
