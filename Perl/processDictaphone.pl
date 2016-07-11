@@ -13,7 +13,7 @@ my $mount="/media/usb0/";
 my $source="Record/Voice";
 my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/Dictaphones";
-my $debugLevel=1; # 0=silent, 1=print and run all system calls, 2=only print system calls.
+my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="log";
 my $maxSizeTransferEnMegabytes = 2048;
 
@@ -192,22 +192,14 @@ sub moveAndRenameOneWavFile {
     # translate textual month into digital value:
     my %mon2num = qw(jan 01 feb 02 mar 03 apr 04 may 05 jun 06 jul 07 aug 08 sep 09 oct 10 nov 11 dec 12); 
     my $month = $mon2num{ lc substr($tmonth, 0, 3) };
-    
-    # add a leading zero to the day if less than 10.
-    my $smday = "";
-    if( $mday < 10 ) {
-	$smday = "0".$mday;
-    } else {
-	$smday = $mday;
-    }
 
     # Build new name of File:
     my $baseNewFileName = ""; 
     if( $month == 1 && $mday == 1 && $hour == 1 && $min == 0 && $sec == 0 ) {
       $baseNewFileName = compactDateFormat($backupDate)."_backup";
-      jybyPrint("Dictaphone without date: Using backupDate '".$baseNewFileName."' instead.\n");
+      jybyPrint("Dictaphone without date: Using the back up date '".$baseNewFileName."' for its name instead.\n");
     } else  {
-      $baseNewFileName = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec;
+      $baseNewFileName = compactDateFormat($adate);
     }
     # Build new name of File:
     my $newFileName = $baseNewFileName."_audioNote".".wav";
@@ -215,7 +207,7 @@ sub moveAndRenameOneWavFile {
     while( -e $destination."/".$newFileName) {
         jybyPrint("Increment the version number as '".$destination."/".$newFileName."' already exists.\n");
 	$version = $version+1;
-	$newFileName = $baseNewFileName."v".$version.".wav";
+	$newFileName = $baseNewFileName."_v".$version.".wav";
     }
     # Move and rename the wave file to the folder $destination :
     jybySystem("mv $source ".$destination."/".$newFileName."\n");    
@@ -233,25 +225,8 @@ sub moveAndRenameWavFilesInVoiceFolder {
     my $backupDate = localtime();
     jybyPrint("Back-up Time (today)\t: ".$backupDate."\n");
     
-    # Parse the back-up date supposing it follows the format "Sun Nov 28 06:25:26 2010" 
-    my ($wday, $tmonth, $mday, $hour, $min, $sec, $year) 
-	= ($backupDate =~ /(\w+)\s+(\w+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\d+)/) 
-	or die("Problem parsing modification date: $!!\n");
-    
-    # translate textual month into digital value:
-    my %mon2num = qw(jan 01 feb 02 mar 03 apr 04 may 05 jun 06 jul 07 aug 08 sep 09 oct 10 nov 11 dec 12); 
-    my $month = $mon2num{ lc substr($tmonth, 0, 3) };
-    
-    # add a leading zero to the day if less than 10.
-    my $smday = "";
-    if( $mday < 10 ) {
-	$smday = "0".$mday;
-    } else {
-	$smday = $mday;
-    }
-    
     # Create new folder, named after current date:
-    my $baseNewFolderName = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec."";
+    my $baseNewFolderName =  compactDateFormat($backupDate);
     my $newFolderName = $baseNewFolderName;
     my $version = 0;
     while( -e $destination.$newFolderName) {
