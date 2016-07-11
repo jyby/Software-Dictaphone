@@ -224,9 +224,9 @@ sub moveAndRenameWavFilesInVoiceFolder {
     my $baseNewFolderName = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec."";
     my $newFolderName = $baseNewFolderName;
     my $version = 0;
-    while( -e $source.$newFolderName) {
+    while( -e $destination.$newFolderName) {
 	$version = $version+1;
-	$newFolderName = $baseNewFolderName." version ".$version;
+	$newFolderName = $baseNewFolderName."v".$version;
     }
     jybySystem("mkdir '".$destination.$newFolderName."'\n");
     
