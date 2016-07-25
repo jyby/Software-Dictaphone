@@ -1,0 +1,60 @@
+#+TITLE: Devices to be used as Dictaphones
+#+DESCRIPTION: A short review of the various devices which can be used as Dictaphones
+#+AUTHOR: Jérémy Barbay
+#+EMAIL: jeremy@barbay.cl
+#+CATEGORY: documentation
+
+* SONY WALKMAN
+  
+I have been using SONY WALKMAN (https://github.com/jyby/Software-Dictaphone/blob/master/Pictures%20of%20Dictaphone/IMG_8836.JPG) since 2009, but each "upgrade" from SONY made it worse for the usage I have of it.
+
+** Description
+   - looks like a large USB key
+   - displays title of music currently played
+   - has a hole through which one can put a necklace
+   - Can play both radio and Mp3
+** Good Points
+   + Fast to record an audio note:
+     + if on, long press on one button
+     + if off, turn on and then long press (Could be improved but already reasonable to use)
+   + Good at playing music by folder, by categories
+   - On some models, one can enter the date and time, and the audio notes creation files are describing the time they were recorded!
+** Bad Points
+   - Very annoying Zap button
+   - On some models, no way to enter the date and time :(
+   - Caps on USB plug is easy to lose
+   - Sometimes crashes, and requires a general reboot via a small button (for which you need a pointy object) on the back.
+** Conclusion
+   If not perfect, my choice of usage so far
+
+* Digital Voice Recorder: QZTELECTRONIC Mini USB
+
+In 2016, I purchased some new ones from [[https://www.amazon.com/gp/product/B00Y6O3SU0/ref=ox_sc_act_title_2?ie=UTF8&psc=1&smid=AEL1S7L2JMBD8][QZTELECTRONIC]]: ("QZTELECTRONIC Mini USB 8GB Digital Voice Recorder Dictaphone MP3 Player (Black)".
+
+** Description
+    + Small, compact
+    + Comes in a neat box with
+      + a usb to min jack cable and
+      + a pair of earphones
+    + four inputs buttons:
+      - one on/off button
+      - one plus button
+      - one minus button
+      - min jack plug serves as one more button
+    + Multi mode
+      - recording mode :: min jack unplugged, button on 
+      - playing mode :: min jack plugged, button on 
+	- plus :: short press = next song; long press = volume up
+	- minus :: short press = alternate between mp3 and wav playing (i.e. between playing music and recordings);  long press = volume down
+** Good points
+   1. No annoying Zap button from the SONY Walkman
+   2. very compact and light.
+** Bad Points
+   1. In order to record an audio note, one needs to unplug the earphones: if you are listening to music and suddenly have a thought to record, this is VERY annoying.
+   2. No way to set the time nor date, so that the audio notes are tagged with the exact date and time of the recording.
+   3. When turning on, the device is not ready to record for some 1 to 2 seconds.
+   4. No display (minor for my application, but a bit annoying for music playing)
+   5. Needs an extra cable to connect (i.e. you can't use it as a usb key which is always with you).
+   6. No hole through which to put a necklace
+** Conclusion
+   Those are more suitable for "spying" than for taking audio notes.
