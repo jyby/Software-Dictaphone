@@ -4,57 +4,184 @@
 #+EMAIL: jeremy@barbay.cl
 #+CATEGORY: documentation
 
-* SONY WALKMAN
+* TESTED
+** QZTELECTRONIC 8GB USB Flash Digital Audio Voice Recorder 650Hr Rechargeable Dictaphone 
+https://www.amazon.com/gp/product/B00Y6O3PGW/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1
+In August 2016, I purchased one of those from QZTELECTRONIC via Amazon.
+
+*** Description
+    - 8 GB
+    - Plays Mp3
+    - Includes speaker
+    - One button recording
+    - Stereo recording
+*** Good points
+    - Automatic pause when detects silence
+    - USB Rechargeable
+*** Bad Points
+    - A bit too large to have hanging around one's neck
+    - Long to start
+    - Date is reset to [2016-01-01 Fri 12:00] when turned off?
+*** Conclusion
+    - Once again, more suitable for recording classes or spying than for audionote recording.
+    - The date is probably a bug, but is quite frustrating for my system to archive audionotes.
+
+** SONY WALKMAN NWZ-B163F (Round on both ends)
+I have been using SONY WALKMAN NWZ-B163F (Round on both ends) (https://github.com/jyby/Software-Dictaphone/blob/master/Pictures%20of%20Dictaphone/IMG_8836.JPG) since 2009, and I am quite happy with it.
+
+*** Description
+    - looks like a large USB key, round on both ends, with a cap to protect the USB plug.
+    - Many buttons:
+      - front
+	- Button Back/Home (short press/long press)
+	- Zap
+	- Play/Pause
+	- Circular button Forward/Backward
+      - bottom
+	- Hold
+      - top
+	- Rec/Stop
+	- Volume + and -
+	- Play Mode / Bass
+    - displays title of music currently played;
+    - has a hole through which one can put a necklace;
+    - Can play both radio and Mp3;
+    - Can record both voice and radio.
+    - Can be used as a USB key.
+*** Good Points
+    + Fast to record an audio note:
+      + if on, long press on one button
+      + if off, turn on and then long press (Could be improved but already reasonable to use)
+    + Good at playing music by folder, by categories
+    + If one takes the time to setup the date of the dictaphone, the audio notes creation files are describing the time they were recorded, which is quite neat for my archive.
+*** Bad Points
+    - Very annoying Zap button
+    - Caps on USB plug is easy to lose
+    - Sometimes crashes, and requires a general reboot via a small button (for which you need a pointy object) on the back.
+*** Conclusion
+    If not perfect, my choice of usage so far.
+
+** SONY WALKMAN NWZ-B172F (Square on one end)
   
-I have been using SONY WALKMAN (https://github.com/jyby/Software-Dictaphone/blob/master/Pictures%20of%20Dictaphone/IMG_8836.JPG) since 2009, but each "upgrade" from SONY made it worse for the usage I have of it.
+This is one upgrade from SONY to the previous one, which made it worse for the usage I have of it.
 
-** Description
-   - looks like a large USB key
-   - displays title of music currently played
-   - has a hole through which one can put a necklace
-   - Can play both radio and Mp3
-** Good Points
-   + Fast to record an audio note:
-     + if on, long press on one button
-     + if off, turn on and then long press (Could be improved but already reasonable to use)
-   + Good at playing music by folder, by categories
-   - On some models, one can enter the date and time, and the audio notes creation files are describing the time they were recorded!
-** Bad Points
-   - Very annoying Zap button
-   - On some models, no way to enter the date and time :(
-   - Caps on USB plug is easy to lose
-   - Sometimes crashes, and requires a general reboot via a small button (for which you need a pointy object) on the back.
-** Conclusion
-   If not perfect, my choice of usage so far
+*** Description
+    - looks like a large USB key, square on microphone end, with a round cap to protect the USB plug.
+    - Many buttons:
+      - front
+	- Play/Pause
+	- Circular button Forward/Backward
+      - bottom
+	- Button Back/Home (short press/long press)
+	- Hold
+      - top
+	- Zap/Bass
+	- Rec/Stop
+	- Volume + and -
+    - displays title of music currently played;
+    - has a hole through which one can put a necklace;
+    - Can play both radio and Mp3;
+    - Can record both voice and radio.
+*** Good Points
+    + Fast to record an audio note:
+      + if on, long press on one button
+      + if off, turn on and then long press (Could be improved but already reasonable to use)
+    + Good at playing music by folder, by categories
+*** Bad Points
+    - one cannot enter the date and time, and the audio notes creation files are all with the same creation date!!!
+    - Stil the very annoying Zap button
+    - Caps on USB plug is still easy to lose
+    - Sometimes crashes, and requires a general reboot via a small button (for which you need a pointy object) on the back.
+*** Conclusion
+    This upgrade from Sony was a downgrade for me:
+    - I immediately disliked the more squared look
+    - I hated when I discovered that I lost the ability to recover the date and time at which an audionote was recorded!
+** Digital Voice Recorder: QZTELECTRONIC Mini USB
 
-* Digital Voice Recorder: QZTELECTRONIC Mini USB
+In July 2016, I purchased some new ones from QZTELECTRONIC (Mini USB 8GB Digital Voice Recorder Dictaphone MP3 Player (Black)).
 
-In 2016, I purchased some new ones from [[https://www.amazon.com/gp/product/B00Y6O3SU0/ref=ox_sc_act_title_2?ie=UTF8&psc=1&smid=AEL1S7L2JMBD8][QZTELECTRONIC]]: ("QZTELECTRONIC Mini USB 8GB Digital Voice Recorder Dictaphone MP3 Player (Black)".
+*** Sources
+    - https://www.amazon.com/gp/product/B00Y6O3SU0/ref=ox_sc_act_title_2?ie=UTF8&psc=1&smid=AEL1S7L2JMBD8
+    - http://www.qztelectronic.com/product/html/?19.html
+*** Description
+     + Small, compact
+     + Comes in a neat box with
+       + a usb to min jack cable and
+       + a pair of earphones
+     + four inputs buttons:
+       - one on/off button
+       - one plus button
+       - one minus button
+       - min jack plug serves as one more button
+     + Multi mode
+       - recording mode :: min jack unplugged, button on 
+       - playing mode :: min jack plugged, button on 
+	 - plus :: short press = next song; long press = volume up
+	 - minus :: short press = alternate between mp3 and wav playing (i.e. between playing music and recordings);  long press = volume down
+*** Good points
+    1. No annoying Zap button from the SONY Walkman
+    2. very compact and light.
+*** Bad Points
+    1. In order to record an audio note, one needs to unplug the earphones: if you are listening to music and suddenly have a thought to record, this is VERY annoying.
+    2. No way to set the time nor date, so that the audio notes are tagged with the exact date and time of the recording.
+    3. When turning on, the device is not ready to record for some 1 to 2 seconds.
+    4. No display (minor for my application, but a bit annoying for music playing)
+    5. Needs an extra cable to connect (i.e. you can't use it as a usb key which is always with you).
+    6. No hole through which to put a necklace
+*** Conclusion
+    Those are more suitable for "spying" than for taking audio notes.
+* TO TEST
+** Best Voice Recorder SK-858 8GB USB Digital Spy Voice Portable Dictaphone Recorder (Silver / Black) :noMusic:
 
-** Description
-    + Small, compact
-    + Comes in a neat box with
-      + a usb to min jack cable and
-      + a pair of earphones
-    + four inputs buttons:
-      - one on/off button
-      - one plus button
-      - one minus button
-      - min jack plug serves as one more button
-    + Multi mode
-      - recording mode :: min jack unplugged, button on 
-      - playing mode :: min jack plugged, button on 
-	- plus :: short press = next song; long press = volume up
-	- minus :: short press = alternate between mp3 and wav playing (i.e. between playing music and recordings);  long press = volume down
-** Good points
-   1. No annoying Zap button from the SONY Walkman
-   2. very compact and light.
-** Bad Points
-   1. In order to record an audio note, one needs to unplug the earphones: if you are listening to music and suddenly have a thought to record, this is VERY annoying.
-   2. No way to set the time nor date, so that the audio notes are tagged with the exact date and time of the recording.
-   3. When turning on, the device is not ready to record for some 1 to 2 seconds.
-   4. No display (minor for my application, but a bit annoying for music playing)
-   5. Needs an extra cable to connect (i.e. you can't use it as a usb key which is always with you).
-   6. No hole through which to put a necklace
-** Conclusion
-   Those are more suitable for "spying" than for taking audio notes.
+https://www.amazon.com/dp/B00OL1ADIS/ref=pd_luc_rh_hashrec_02_01_t_img_lh?_encoding=UTF8&psc=1
+
+** USB 8GB Digital Spy Portable Voice Recorder, Dictaphone Recorder with Free Lanyard in Assorted Colors Silver, Gunmetal, Blue, Gold in a Premium Alloy Housing :noMusic:
+https://www.amazon.com/dp/B00WW5PU9C?psc=1
+
+** CANC Ecloud ShopUS® 2 pieces 2GB LCD MP3 Player USB Flash Drive Built-in FM Radio :AAA:CANC:
+   :LOGBOOK:
+   - State "CANC"       from ""           [2016-08-11 Thu 06:28]
+   :END:
+
+https://www.amazon.com/Ecloud-ShopUS%C2%AE-pieces-Player-Built/dp/B0152HAJ10/ref=pd_day0_229_18?ie=UTF8&dpID=41PE36XOx0L&dpSrc=sims&preST=_AC_UL160_SR160%2C160_&psc=1&refRID=GJ0DQMQ4NEGD7FYY85B0
+
+Powered by 1 x AAA battery, battery life over 10 hours
+
+** QZTELECTRONIC JNN Q25 3-in-1 Mini 16GB Micro HD Digital Audio Voice Recorder with Music MP3 Player and USB Flash Drive Small Portable Multifunctional and Rechargeable 0.2" Screen (Black) 
+
+https://www.amazon.com/QZTELECTRONIC-Recorder-Portable-Multifunctional-Rechargeable/dp/B01GPQ5A70/ref=sr_1_2?s=electronics&ie=UTF8&qid=1470910831&sr=1-2&keywords=QZTELECTRONIC
+
+
+** 8GB New Digital Voice Recorder from QZT Electronic And Technology Co,.Ltd.
+ https://www.alibaba.com/product-detail/2016-hottest-Q25-model-long-time_60450514277.html
+
+    1. Up to 384 KBPS / 48 KHZ  WAV
+    2. Build in 8GB Memory.(Can capacity 96hours working time)
+    3. Time-stamped
+    4. Build in clamp and 1.0inch LCD Monitor
+    5. Smaller size: 56*23*7mm. only 15g
+    6. Support MP3 Player
+    7. One key voice recorder
+    8. charging while recording function
+** Generic 8GB USB Flash Digital Audio Voice Recorder 650Hr Rechargeable Dictaphone by QZTELECTRONIC
+
+
+https://www.amazon.com/Generic-Digital-Recorder-Rechargeable-Dictaphone/dp/B00Y6O3PGW/ref=sr_1_24?s=electronics&ie=UTF8&qid=1470910831&sr=1-24&keywords=QZTELECTRONIC
+
+** CANC USB LCD Mini MP3 Player Voice Recorder with FM Radio by Generic :AAA:CANC:
+   :LOGBOOK:
+   - State "CANC"       from ""           [2016-08-11 Thu 06:24]
+   :END:
+
+https://www.amazon.com/Color-Player-Voice-Recorder-Radio/dp/B00NWC1TE4/ref=pd_sim_sbs_229_5?ie=UTF8&dpID=41-4aEef88L&dpSrc=sims&preST=_AC_UL320_SR320%2C320_&psc=1&refRID=F7HTSBX5TESQNXYCTFVC
+
+
+
+    With FM Radio function
+    High Quality MP3 Music Player. All is basic of the pursuit of perfect sound quality
+    SNR: >85dB
+    Size: 95mm x 28mm x 15mm
+    USB: USB 2.0
+
+ARGH: Get powered by 1 AAA battery (Not inclued).
+
