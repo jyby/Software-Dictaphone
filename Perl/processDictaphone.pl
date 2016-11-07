@@ -56,7 +56,6 @@ checkDestinationIsFolder($audioNotesFolderOnComputer);
 my $nbAudioNotesOnDictaphone = estimateNbAudioNotesLeftToRead("$mount$source");
 my $nbAudioNotesOnComputer = estimateNbAudioNotesLeftToRead($audioNotesFolderOnComputer);
 my $nbAudioNotesToProcess = $nbAudioNotesOnDictaphone + $nbAudioNotesOnComputer;
-my $estimatedProcessingTime = $nbAudioNotesToProcess*2;
 print "Will move $nbAudioNotesOnDictaphone audionotes from '$mount$source' to '$audioNotesFolderOnComputer'.\n";
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes before adding the ones from the dictaphone
 moveAndRenameWavFilesInVoiceFolder("$mount$source",$audioNotesFolderOnComputer);
@@ -96,8 +95,9 @@ sub printTimeRequiredToProcessAudioNotes {
     my ($nbAudioNotesToProcess) = shift;
     print "There are now $nbAudioNotesToProcess audionotes left to process, ";
     print "which can be processed in at most ";
+    my $estimatedProcessingTime = $nbAudioNotesToProcess*2; # 2mns per audio notes
     if( $estimatedProcessingTime<60 ) {
-	print "$estimatedProcessingTime mns.\n";
+	print "$estimatedProcessingTime mns";
     } else {
 	my $estimatedProcessingTimeInHours = int($estimatedProcessingTime / 60);
 	my $estimatedProcessingTimeRemain = $estimatedProcessingTime % 60;
@@ -107,11 +107,12 @@ sub printTimeRequiredToProcessAudioNotes {
 	    print "$estimatedProcessingTimeInHours hours";
 	}
 	if($estimatedProcessingTimeRemain > 0) {
-	    print " and $estimatedProcessingTimeRemain mns.\n";
-	} else {
-	    print ".\n";
-	}
+	    print " and $estimatedProcessingTimeRemain mns";
+	} 
+	my $estimatedProcessingTimeInSessions = int($estimatedProcessingTime / 25);
+	print ", or $estimatedProcessingTimeInSessions sessions of 25mns";
     }
+    print ".\n";
 }
     
 
