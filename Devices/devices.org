@@ -5,6 +5,22 @@
 #+CATEGORY: documentation
 
 * TESTED
+** PHILCO Digital Recorder 78216
+*** Description
+    - 16 GB
+    - Plays Mp3
+    - Includes speaker
+    - Stereo recording
+*** Good points
+    - One button recording
+*** Bad Points
+    - Almost too large to have hanging around one's neck
+    - Needs 2 AAA Bateries
+    - Needs a usb cable to connect
+    - Not ideal to play various music.
+*** Conclusion
+    - Once again, more suitable for recording classes or spying than for audionote recording.
+
 ** QZTELECTRONIC 8GB USB Flash Digital Audio Voice Recorder 650Hr Rechargeable Dictaphone 
 https://www.amazon.com/gp/product/B00Y6O3PGW/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1
 In August 2016, I purchased one of those from QZTELECTRONIC via Amazon.
@@ -19,6 +35,7 @@ In August 2016, I purchased one of those from QZTELECTRONIC via Amazon.
     - Automatic pause when detects silence
     - USB Rechargeable
 *** Bad Points
+    - Needs a usb cable to connect
     - A bit too large to have hanging around one's neck
     - Long to start
     - Date is reset to [2016-01-01 Fri 12:00] when turned off?
