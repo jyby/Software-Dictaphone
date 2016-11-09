@@ -8,8 +8,7 @@
 
 ** Descriptions of the scripts
 
-   Along the months I developped some scripts in Perl to help me
-   process those audionotes:
+   Along the months I developped some scripts in Perl to help me process those audionotes:
    1) =processDictaphone.pl= simply
       1. creates a folder named after the current date in format 2011-12-11,
       2. copy the audionotes from the dictaphone in it
@@ -17,11 +16,8 @@
    2) =readWavFiles.pl= simply
       - reads the audionotes to be processed, one at at time, pausing between each.
       - It picks the folders in reversed chronological order (the most recent first),
-      - and the files inside each folder in chronological order (in the
-       	order they were recorded).
-      - After playing, the audionotes is moved to another folder,
-        replicating the folder structure (i.e. the dated batch
-        folders) of the original folder.
+      - and the files inside each folder in chronological order (in the order they were recorded).
+      - After playing, the audionotes is moved to another folder, replicating the folder structure (i.e. the dated batch folders) of the original folder.
       - The keys are:
 	- Ret to play again
 	- C-c to stop the playing
@@ -29,49 +25,49 @@
 
 ** Wishlist
 
-   Those scripts do the job (and a great one for me), but I do hope to
-   improve them. Some ideas follow:
+   Those scripts do the job (and a great one for me), but I do hope to improve them. Some ideas follow:
 
-   1. Make =processDictaphone.pl= automatically launch when the
-      dictaphone is inserted in the USB port.
+*** TODO REPROGRAM the scripts from Perl to Python
+*** MAYB DOCUMENT how to start =processDictaphone.pl= automatically when a dictaphone is connected. :MAYB:
+    :LOGBOOK:
+    - State "MAYB"       from "TODO"       [2016-11-09 Wed 20:18]
+    - State "TODO"       from ""           [2016-11-09 Wed 20:18]
+    :END:
+ Make =processDictaphone.pl= automatically launch when the dictaphone is inserted in the USB port.
 
-   2. Improve the graphical and keyboard interface of
-      =readWavFiles.pl=: I am almost sure I am not using the right way
-      to read the keyword in Perl. Nevertheless they should be
-      "Control" keys, so that to reduce the risks that bad things
-      happen when one types in the script's shell inside of one's
-      favorite editor.
+*** MAYB Improve the graphical and keyboard interface of  =readWavFiles.pl=: :MAYB:
+    :LOGBOOK:
+    - State "MAYB"       from "TODO"       [2016-11-09 Wed 20:18]
+    - State "TODO"       from ""           [2016-11-09 Wed 20:18]
+    :END:
 
-   3. Add commands to =readWavFiles.pl=, such as
-      - copy file to a folder other than default (for long audionotes
-        to process later or to archive in a particular repository)
-      - move back (infinitely?), moving back the files from the
-        destination folder to the source folder.
+I am almost sure I am not using the right way to read the keyword in Perl. Nevertheless they should be "Control" keys, so that to reduce the risks that bad things happen when one types in the script's shell inside of one's favorite editor.
 
-   4. Include in =readWavFiles.pl= the sound of victory when all
-      audionotes have been processed: currently it is just the last
-      audionotes processed, which is read automatically, and can be
-      archived by error. It would be nicer to have it separate.
+*** TODO ADD command to =readWavFiles.pl= to copy the audio file to another folder than the default
+    :LOGBOOK:
+    - State "TODO"       from ""           [2016-11-09 Wed 20:19]
+    :END:
+    for long audionotes to process later or to archive in a particular repository
 
-   5. Include the use of the scripts in Emacs, maybe with org-capture,
-      so that one action entered in text in org-mode can be linked to
-      the audio-note which generated it.
+*** TODO ADD command to =readWavFiles.pl= to move back (infinitely?), 
+    - A kind of UNDO button,  moving back the files from the destination folder to the source folder.
+
+*** TODO ADD to =readWavFiles.pl= the sound of victory
+
+   - Include in =readWavFiles.pl= the sound of victory when all audionotes have been processed: currently it is just the last audionotes processed, which is read automatically, and can be archived by error. It would be nicer to have it separate.
+
+*** MAYB REPROGRAM the script in ELISP for it tu run in EMACS
+    Maybe with org-capture, so that one action entered in text in org-mode can be linked to the audio-note which generated it.
 
 
 ** Participation to the project and Licence.
 
-    I am not so proud of the source that I would ask you to cite me if
-    you use it, but I will be happy if you let me know.
+    I am not so proud of the source that I would ask you to cite me if you use it, but I will be happy if you let me know.
 
-    I am planning to work more on those scripts, but cannot promise to
-    maintain them.
+    I am planning to work more on those scripts, but cannot promise to maintain them.
 
-    I would be more than happy if anyone takes those scripts and
-    reprogam them in another language.
+    I would be more than happy if anyone takes those scripts and reprogam them in another language.
 
 ** Acknowledgements
 
-   Kudos to David Allen who mentionned digital recording devices in
-   his book "Get Things Done": this pushed me to try using a
-   dictaphone, which helped me a lot to get organized and a quiet
-   mind. I was always short of memory but now I have external memory!
+   Kudos to David Allen who mentionned digital recording devices in his book "Get Things Done": this pushed me to try using a dictaphone, which helped me a lot to get organized and a quiet mind. I was always short of memory but now I have external memory!
