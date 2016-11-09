@@ -35,6 +35,14 @@ if ( @ARGV == 0 ) {
 	$mount="/media/WALKMANSONY/";
 	$source="Record/Voice/";
 	$audioNotesFolderOnComputer = "/home/jbarbay/Unison/AudioNotesToProcess/";
+    } elsif( -e "/media/PHILCO" ) {
+	$mount="/media/PHILCO/";
+	$source="Record/";
+	$audioNotesFolderOnComputer = "/home/jbarbay/Unison/AudioNotesToProcess/";
+    }
+    if( -e "$mount$source" ) {
+    } else { 
+	$source="Record/";
     }
 } elsif ( @ARGV == 1 ) {
     $mount = shift;
