@@ -52,12 +52,14 @@ I am almost sure I am not using the right way to read the keyword in Perl. Never
 *** TODO ADD command to =readWavFiles.pl= to move back (infinitely?), 
     - A kind of UNDO button,  moving back the files from the destination folder to the source folder.
 
+*** MAYB CLEAN UP the choice of the source file when no parameter is given
 *** TODO ADD to =readWavFiles.pl= the sound of victory
 
    - Include in =readWavFiles.pl= the sound of victory when all audionotes have been processed: currently it is just the last audionotes processed, which is read automatically, and can be archived by error. It would be nicer to have it separate.
 
-*** MAYB REPROGRAM the script in ELISP for it tu run in EMACS
+*** MAYB INTEGRATE the script in ELISP to add  to the todo item generated a link to the correponding audio file
     Maybe with org-capture, so that one action entered in text in org-mode can be linked to the audio-note which generated it.
+
 
 
 ** Participation to the project and Licence.
