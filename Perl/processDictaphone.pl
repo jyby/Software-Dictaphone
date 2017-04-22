@@ -101,7 +101,7 @@ sub jybyPrint {
 
 sub printTimeRequiredToProcessAudioNotes {
     my ($nbAudioNotesToProcess) = shift;
-    print "There are now $nbAudioNotesToProcess audionotes left to process, ";
+    print "There are now $nbAudioNotesToProcess audionotes left to process, \n";
     print "which can be processed in at most ";
     my $estimatedProcessingTime = $nbAudioNotesToProcess*2; # 2mns per audio notes
     if( $estimatedProcessingTime<60 ) {
