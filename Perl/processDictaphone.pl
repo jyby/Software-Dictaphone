@@ -14,16 +14,16 @@ my $source="Record/Voice";
 my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/Dictaphones";
 my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
-my $logFile="log";
+my $logFile="/home/jbarbay/.audioNotes.log";
 my $maxSizeTransferEnMegabytes = 2048;
 
-# + Example of Usage:
+# + Examples of Usage:
 # ./processDictaphone.pl /media/WalkmanSony/ Record/Voice/ ~/Unison/AudioNotesToProcess/
+# ./processDictaphone.pl 
 
 print "# Perl Script to Back-up audionotes from any USB dictaphone.\n";
 print "# by Jeremy Barbay\n\n";
-print "# Version last modified on [2016-06-07 Tue] \n\n";
-    
+print "# Version last modified on     [2019-03-19 Tue] \n\n";
 
 # Recover the parameters: 
 if ( @ARGV == 0 ) {
@@ -38,6 +38,10 @@ if ( @ARGV == 0 ) {
     } elsif( -e "/media/PHILCO" ) {
 	$mount="/media/PHILCO/";
 	$source="Record/";
+	$audioNotesFolderOnComputer = "/home/jbarbay/Unison/AudioNotesToProcess/";
+    } elsif( -e "/media/AMT_MP3" ) {
+	$mount="/media/AMT_MP3/";
+	$source="VOICE/";
 	$audioNotesFolderOnComputer = "/home/jbarbay/Unison/AudioNotesToProcess/";
     }
     if( -e "$mount$source" ) {
@@ -351,8 +355,8 @@ sub trackNbAudioNotesLeftToRead{
     # }
 
     if( ($debugLevel == 0) | ($debugLevel == 1) ) {
-	if( !(-e "${AudioNotes}${logFile}") ) {
-	    open (LOGFILE, ">${AudioNotes}${logFile}") or die ("Cannot open file ${AudioNotes}${logFile} !!!");
+	if( !(-e "${logFile}") ) {
+	    open (LOGFILE, ">${logFile}") or die ("Cannot open file ${logFile} !!!");
 	    print LOGFILE "# Log produced by the scripts =readWaveFiles.pl= and =processAudioNotes.pl=\n";
 	    print LOGFILE "# ";
 	    print LOGFILE "absoluteTime\t";
@@ -362,7 +366,7 @@ sub trackNbAudioNotesLeftToRead{
 	    print LOGFILE "hh:mm:ss\t";
 	    print LOGFILE "\n";
 	} else {
-	    open (LOGFILE, ">>${AudioNotes}${logFile}") or die ("Cannot open file ${AudioNotes}${logFile} !!!");
+	    open (LOGFILE, ">>${logFile}") or die ("Cannot open file ${logFile} !!!");
 	}
 	print LOGFILE "$absoluteTime\t";
 	print LOGFILE "$count\t";

@@ -32,7 +32,7 @@ use File::stat;            # To get the time and size of a file
 
 print "# Perl Script to process audionotes from a jukebox SONY.\n";
 print "# by Jeremy Barbay\n\n";
-print "# Version last modified on [2016-05-27 Fri] \n\n";
+print "# Version last modified on [2019-03-19 Tue] \n\n";
     
     
 
@@ -41,7 +41,7 @@ my $source = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $destination = "/home/jbarbay/Unison/References/AudioNotesArchived/";
 my $movingFiles=1; # True
 my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
-my $logFile="log";
+my $logFile="/home/jbarbay/.audioNotes.log";
 my $nbFiles;
 my $nbFilesProcessed=0;
 
@@ -221,8 +221,8 @@ sub trackNbAudioNotesLeftToRead{
     my $count=estimateNbAudioNotesLeftToRead($AudioNotes);
 
     if( ($debugLevel == 0) | ($debugLevel == 1) ) {
-	if( !(-e "${AudioNotes}${logFile}") ) {
-	    open (LOGFILE, ">${AudioNotes}${logFile}") or die ("Cannot open file ${AudioNotes}${logFile} !!!");
+	if( !(-e "${logFile}") ) {
+	    open (LOGFILE, ">${logFile}") or die ("Cannot open file ${logFile} !!!");
 	    print LOGFILE "# Log produced by the scripts =readWaveFiles.pl= and =processAudioNotes.pl=\n";
 	    print LOGFILE "# ";
 	    print LOGFILE "absoluteTime\t";
@@ -232,7 +232,7 @@ sub trackNbAudioNotesLeftToRead{
 	    print LOGFILE "hh:mm:ss\t";
 	    print LOGFILE "\n";
 	} else {
-	    open (LOGFILE, ">>${AudioNotes}${logFile}") or die ("Cannot open file ${AudioNotes}${logFile} !!!");
+	    open (LOGFILE, ">>${logFile}") or die ("Cannot open file ${logFile} !!!");
 	}
 	print LOGFILE "$absoluteTime\t";
 	print LOGFILE "$count\t";
@@ -243,7 +243,7 @@ sub trackNbAudioNotesLeftToRead{
 	close (LOGFILE);
     }     
     if( ($debugLevel == 2) | ($debugLevel == 1) ) {
-	print "open $AudioNotes$logFile\n";
+	print "open $logFile\n";
 	print  "absoluteTime\t";
 	print  "count\t";
 	print  "yyyy\t";
