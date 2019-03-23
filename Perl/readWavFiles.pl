@@ -177,11 +177,10 @@ sub process_file {
 		# Play file:
 		if( ($debugLevel == 0) ) {
 		    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($stats->ctime); # Creation time.
-		    print "Note ".$f." archived";
-		    printf(" on %u-%02u-%02u",(1900+$year),($mon+1),$mday);
-		    printf(" at %02u:%02u",$hour,$min);
-		    printf " (of size: %uK)", $filesize;
-		    print ".\n";
+		    print "Note ".$f." archived\n";
+		    printf(" - on %u-%02u-%02u\n",(1900+$year),($mon+1),$mday);
+		    printf(" - at %02u:%02u\n",$hour,$min);
+		    printf " - (of size: %uK).\n", $filesize;
 		    system("play -q '".$source.$relativePath.$f."'\n");		
 		} elsif( ($debugLevel == 1) ) {
 		    print "play '".$source.$relativePath.$f."'\n";		
