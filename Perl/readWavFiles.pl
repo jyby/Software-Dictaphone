@@ -239,6 +239,7 @@ sub trackNbAudioNotesLeftToRead{
 	print LOGFILE sprintf("%u\t",(1900+$year));
 	print LOGFILE sprintf("%02u-%02u\t",($mon+1),$mday);
 	print LOGFILE sprintf("%02u:%02u:%02u\t",$hour,$min,$sec);
+	print LOGFILE "readWavFiles.pl\t";
 	print LOGFILE "\n";
 	close (LOGFILE);
     }     
@@ -255,6 +256,7 @@ sub trackNbAudioNotesLeftToRead{
 	printf("%u\t",(1900+$year));
 	printf("%02u-%02u\t",($mon+1),$mday);
 	printf("%02u:%02u:%02u\t",$hour,$min,$sec);
+	print  "readWavFiles.pl\t";
 	print "\n";
 	print  'close (LOGFILE);\n';
     } 

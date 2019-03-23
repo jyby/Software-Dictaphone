@@ -370,9 +370,10 @@ sub trackNbAudioNotesLeftToRead{
 	}
 	print LOGFILE "$absoluteTime\t";
 	print LOGFILE "$count\t";
-	printf(LOGFILE  "%u\t",(1900+$year));
-	printf(LOGFILE  "%02u-%02u\t",($mon+1),$mday);
-	printf(LOGFILE  "%02u:%02u:%02u\t",$hour,$min,$sec);
+	printf(LOGFILE "%u\t",(1900+$year));
+	printf(LOGFILE "%02u-%02u\t",($mon+1),$mday);
+	printf(LOGFILE "%02u:%02u:%02u\t",$hour,$min,$sec);
+	printf(LOGFILE "processDictaphone\t");
 	print LOGFILE "\n";
 	close (LOGFILE);
     }     
