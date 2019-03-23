@@ -22,8 +22,8 @@ my $maxSizeTransferEnMegabytes = 2048;
 # ./processDictaphone.pl 
 
 print "# Perl Script to Back-up audionotes from any USB dictaphone.\n";
-print "# by Jeremy Barbay\n\n";
-print "# Version last modified on     [2019-03-19 Tue] \n\n";
+print "# by Jeremy Barbay\n";
+print "# Version last modified on [2019-03-23 Sat]\n";
 
 # Recover the parameters: 
 if ( @ARGV == 0 ) {
@@ -62,19 +62,19 @@ if ( @ARGV == 0 ) {
 }
 
 
-print "\nProcessing '$mount$source' to '$audioNotesFolderOnComputer'.\n";
+print "\nProcessing '$mount$source' \n  to '$audioNotesFolderOnComputer'.\n";
 checkSourceCanBeAccessed($mount,$source);
 checkDestinationIsFolder($audioNotesFolderOnComputer);
 my $nbAudioNotesOnDictaphone = estimateNbAudioNotesLeftToRead("$mount$source");
 my $nbAudioNotesOnComputer = estimateNbAudioNotesLeftToRead($audioNotesFolderOnComputer);
 my $nbAudioNotesToProcess = $nbAudioNotesOnDictaphone + $nbAudioNotesOnComputer;
-print "Will move $nbAudioNotesOnDictaphone audionotes from '$mount$source' to '$audioNotesFolderOnComputer'.\n";
+print "Will move $nbAudioNotesOnDictaphone audionotes \n - from '$mount$source' \n - to '$audioNotesFolderOnComputer'.\n";
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes before adding the ones from the dictaphone
 moveAndRenameWavFilesInVoiceFolder("$mount$source",$audioNotesFolderOnComputer);
 # moveVoiceFolder("$mount$source",$audioNotesFolderOnComputer);
 trackNbAudioNotesLeftToRead($audioNotesFolderOnComputer); # Log nb of audionotes after adding the ones from the dictaphone
 printTimeRequiredToProcessAudioNotes($nbAudioNotesToProcess);
-print "\nRSynching files in '$dataFolderOnComputer' to '$mount'.\n";
+print "\nRSynching files \n - in '$dataFolderOnComputer' \n - to '$mount'.\n";
 updateContentOfDictaphone($dataFolderOnComputer,$mount);
 printSpaceLeftOnDevice($mount);
 # Umount the Dictaphone
@@ -106,7 +106,7 @@ sub jybyPrint {
 sub printTimeRequiredToProcessAudioNotes {
     my ($nbAudioNotesToProcess) = shift;
     print "There are now $nbAudioNotesToProcess audionotes left to process, \n";
-    print "which can be processed in at most ";
+    print " which can be processed in at most ";
     my $estimatedProcessingTime = $nbAudioNotesToProcess*2; # 2mns per audio notes
     if( $estimatedProcessingTime<60 ) {
 	print "$estimatedProcessingTime mns";
@@ -387,9 +387,11 @@ sub trackNbAudioNotesLeftToRead{
 	print "\n";
 	print  "$absoluteTime\t";
 	print  "$count\t";
+	print  "processDictaphone\t";
 	printf("%u\t",(1900+$year));
 	printf("%02u-%02u\t",($mon+1),$mday);
 	printf("%02u:%02u:%02u\t",$hour,$min,$sec);
+	printf("processDictaphone\t");
 	print "\n";
 	#print  'close (LOGFILE);\n';
     } 
