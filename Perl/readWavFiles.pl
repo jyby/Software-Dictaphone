@@ -229,6 +229,7 @@ sub trackNbAudioNotesLeftToRead{
 	    print LOGFILE "yyyy\t";
 	    print LOGFILE "mm-dd\t";
 	    print LOGFILE "hh:mm:ss\t";
+            print LOGFILE "nameOfScriptLogging\t";
 	    print LOGFILE "\n";
 	} else {
 	    open (LOGFILE, ">>${logFile}") or die ("Cannot open file ${logFile} !!!");
@@ -249,6 +250,7 @@ sub trackNbAudioNotesLeftToRead{
 	print  "yyyy\t";
 	print  "mm-dd\t";
 	print  "hh:mm:ss\t";
+        print  "nameOfScriptLogging\t";
 	print "\n";
 	print  "$absoluteTime\t";
 	print  "$count\t";
