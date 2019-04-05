@@ -13,7 +13,7 @@ my $mount="/media/usb0/";
 my $source="Record/Voice";
 my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/Dictaphones";
-my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
+my $debugLevel=2; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="/home/jbarbay/.audioNotes.log";
 my $maxSizeTransferEnMegabytes = 2048;
 
@@ -131,16 +131,16 @@ sub printTimeRequiredToProcessAudioNotes {
 sub printSpaceLeftOnDevice {
     my ($mount) = shift;
     print ("Space available on the device:\n");	
-    jybySystem("df -h $mount\n");
+    jybySystem("df -h '$mount\n'");
 }
 
 sub checkSourceCanBeAccessed {
     my ($mount) = shift;
     my ($source) = shift;
     if( -e "$mount$source" ) {
-	jybyPrint ("$mount$source available\n");	
+	jybyPrint ("'$mount$source' available\n");	
     } else { 
-	die("$mount$source cannot be accessed!\n");
+	die("'$mount$source' cannot be accessed!\n");
     }
 }
 
@@ -148,10 +148,10 @@ sub checkDestinationIsFolder {
     my ($destination) = shift;
 # Check if $destination exists and is a folder.
     if ( -f $destination )  {
-	die("WARNING! '".$destination."' is a file: cannot copy a folder to it!\n ");
+	die("WARNING! '$destination' is a file: cannot copy a folder to it!\n ");
     } elsif ( !(-d $destination) ) {
-	jybyPrint("Folder '".$destination."' does not exist, creating it.\n");
-	jybySystem("mkdir '".$destination."'\n");
+	jybyPrint("Folder '$destination' does not exist, creating it.\n");
+	jybySystem("mkdir '$destination'\n");
     }
 }
 
@@ -174,7 +174,7 @@ sub compactDateFormat {
 	$smday = $mday;
     }
     
-    # Create new folder, named after current date:
+    # Create name for new folder, named after current date:
     my $compactformat = $year."-".$month."-".$smday."_".$hour."-".$min."-".$sec."";
     return $compactformat;
 }
@@ -184,7 +184,7 @@ sub moveAndRenameOneWavFile {
     my ($destination) = shift;            # relative path
 # Move the .wav file "$source" to the folder $destination, and rename it according to its modification date.
 
-    jybyPrint("Move the .wav file $source to the folder $destination, and rename it according to its modification date.\n");
+    jybyPrint("Move the .wav file $source to the folder '$destination', and rename it according to its modification date.\n");
     
     # Recover statistics:
     my $stats = stat($source) or die "Error while recovering stats: $!!\n";
@@ -199,7 +199,7 @@ sub moveAndRenameOneWavFile {
     
     # Parse supposing $mdate follows the format "Sun Nov 28 06:25:26 2010" 
     my ($wday, $tmonth, $mday, $hour, $min, $sec, $year) 
-	= ($mdate =~ /(\w+)\s+(\w+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\d+)/) 
+	= ($cdate =~ /(\w+)\s+(\w+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\d+)/) 
 	or die("Problem parsing modification date: $!!\n");
     
     # translate textual month into digital value:
@@ -212,18 +212,18 @@ sub moveAndRenameOneWavFile {
       $baseNewFileName = compactDateFormat($backupDate)."_backup";
       jybyPrint("Dictaphone without date: Using the back up date '".$baseNewFileName."' for its name instead.\n");
     } else  {
-      $baseNewFileName = compactDateFormat($adate);
+      $baseNewFileName = compactDateFormat($mdate);
     }
     # Build new name of File:
     my $newFileName = $baseNewFileName."_audioNote".".wav";
     my $version = 1;
     while( -e $destination."/".$newFileName) {
-        jybyPrint("Increment the version number as '".$destination."/".$newFileName."' already exists.\n");
+        jybyPrint("Increment the version number as '$destination/$newFileName' already exists.\n");
 	$version = $version+1;
 	$newFileName = $baseNewFileName."_v".$version.".wav";
     }
     # Move and rename the wave file to the folder $destination :
-    jybySystem("mv $source ".$destination."/".$newFileName."\n");    
+    jybySystem("mv $source '$destination/$newFileName\n");    
 }
 
 
@@ -232,7 +232,7 @@ sub moveAndRenameWavFilesInVoiceFolder {
     my ($destination) = shift;            # relative path
 # Create in $destination a folder named according to the current (backup) date, and move there and rename the audionotes from $source.
 
-    jybyPrint("Create in $destination a folder named according to the current (backup) date, and move there and rename the audionotes from $source.\n");
+    jybyPrint("Create in '$destination' a folder named according to the current (backup) date, and move there and rename the audionotes from '$source'.\n");
     
     # Recover statistics:
     my $backupDate = localtime();
@@ -246,7 +246,7 @@ sub moveAndRenameWavFilesInVoiceFolder {
 	$version = $version+1;
 	$newFolderName = $baseNewFolderName."v".$version;
     }
-    jybySystem("mkdir '".$destination.$newFolderName."'\n");
+    jybySystem("mkdir $destination.$newFolderName\n");
     
     # Move the content of the source folder to the folder $destination/$newFolderName :
     opendir (DIR, $source) ; 
@@ -378,16 +378,16 @@ sub trackNbAudioNotesLeftToRead{
 	close (LOGFILE);
     }     
     if( ($debugLevel == 2) | ($debugLevel == 1) ) {
-	print "open $AudioNotes$logFile and log the following entry:\n";
+	print "open '$AudioNotes$logFile' and log the following entry:\n";
 	print  "absoluteTime\t";
 	print  "count\t";
 	print  "yyyy\t";
 	print  "mm-dd\t";
 	print  "hh:mm:ss\t";
+	print  "nameOfScriptLogging\t";
 	print "\n";
 	print  "$absoluteTime\t";
 	print  "$count\t";
-	print  "processDictaphone\t";
 	printf("%u\t",(1900+$year));
 	printf("%02u-%02u\t",($mon+1),$mday);
 	printf("%02u:%02u:%02u\t",$hour,$min,$sec);
