@@ -23,7 +23,7 @@ my $maxSizeTransferEnMegabytes = 2048;
 
 print "# Perl Script to Back-up audionotes from any USB dictaphone.\n";
 print "# by Jeremy Barbay\n";
-print "# Version last modified on [2019-03-23 Sat]\n";
+print "# Version last modified on [2019-04-06 Sat 09:33]\n";
 
 # Recover the parameters: 
 if ( @ARGV == 0 ) {
@@ -131,7 +131,7 @@ sub printTimeRequiredToProcessAudioNotes {
 sub printSpaceLeftOnDevice {
     my ($mount) = shift;
     print ("Space available on the device:\n");	
-    jybySystem("df -h '$mount\n'");
+    jybySystem("df -h '$mount'\n");
 }
 
 sub checkSourceCanBeAccessed {
