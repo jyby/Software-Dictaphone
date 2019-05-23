@@ -9,8 +9,8 @@ use File::stat;            # To get the time and size of a file
 # + - rsynch the content of the folder $dataFolderOnComputer to the root of the dictaphone, and
 # + - unmount $mount.
 # + Given less parameters, take default values from right to left:
-my $mount="/media/usb0/";
-my $source="Record/Voice";
+my $mount="/home/jbarbay/Mnt/Walkman/";
+my $source="Storage Media/Record/Voice";
 my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/Dictaphones";
 my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
@@ -18,7 +18,7 @@ my $logFile="/home/jbarbay/.audioNotes.log";
 my $maxSizeTransferEnMegabytes = 2048;
 
 # + Examples of Usage:
-# ./processDictaphone.pl /media/WalkmanSony/ Record/Voice/ ~/Unison/AudioNotesToProcess/
+# ./processDictaphone.pl /media/WalkmanSony/Record/Voice/ ~/Unison/AudioNotesToProcess/
 # ./processDictaphone.pl 
 
 print "# Perl Script to Back-up audionotes from any USB dictaphone.\n";
@@ -29,25 +29,26 @@ print "# Version last modified on [2019-04-06 Sat 09:33]\n";
 if ( @ARGV == 0 ) {
     if( -e "/media/FUJITEL" ) {
 	$mount="/media/FUJITEL/";
-	$source="Record/";
+	$source="Storage Media/Record/";
 	$audioNotesFolderOnComputer = "/home/jbarbay/Unison/AudioNotesToProcess/";
     } elsif( -e "/media/WALKMANSONY" ) {
+	print "WALKMAN Sony detected.\n";
 	$mount="/media/WALKMANSONY/";
-	$source="Record/Voice/";
+	$source="Storage Media/Record/Voice/";
 	$audioNotesFolderOnComputer = "/home/jbarbay/Unison/AudioNotesToProcess/";
     } elsif( -e "/media/PHILCO" ) {
 	$mount="/media/PHILCO/";
-	$source="Record/";
+	$source="Storage Media/Record/";
 	$audioNotesFolderOnComputer = "/home/jbarbay/Unison/AudioNotesToProcess/";
     } elsif( -e "/media/AMT_MP3" ) {
 	$mount="/media/AMT_MP3/";
 	$source="VOICE/";
 	$audioNotesFolderOnComputer = "/home/jbarbay/Unison/AudioNotesToProcess/";
     }
-    if( -e "$mount$source" ) {
-    } else { 
-	$source="Record/";
-    }
+    # if( -e "$mount$source" ) {
+    # } else { 
+    # 	$source="Storage Media/Record/";
+    # }
 } elsif ( @ARGV == 1 ) {
     $mount = shift;
 } elsif ( @ARGV == 2 ) {
@@ -63,6 +64,7 @@ if ( @ARGV == 0 ) {
 
 
 print "\nProcessing '$mount$source' \n  to '$audioNotesFolderOnComputer'.\n";
+mountDictaphone($mount);
 checkSourceCanBeAccessed($mount,$source);
 checkDestinationIsFolder($audioNotesFolderOnComputer);
 my $nbAudioNotesOnDictaphone = estimateNbAudioNotesLeftToRead("$mount$source");
@@ -223,6 +225,7 @@ sub moveAndRenameOneWavFile {
 	$newFileName = $baseNewFileName."_v".$version.".wav";
     }
     # Move and rename the wave file to the folder $destination :
+    jybyPrint("Moving a single file:\n");
     jybySystem("mv '$source' '$destination/$newFileName'\n");    
 }
 
@@ -249,7 +252,8 @@ sub moveAndRenameWavFilesInVoiceFolder {
     jybySystem("mkdir '$destination$newFolderName'\n");
     
     # Move the content of the source folder to the folder $destination/$newFolderName :
-    opendir (DIR, $source) ; 
+    jybyPrint("Opening folder\t'$source'\n");
+    opendir (DIR, "$source"); 
     my @entries = readdir(DIR);
     my @dirs = ();
     my $e;
@@ -257,7 +261,9 @@ sub moveAndRenameWavFilesInVoiceFolder {
     foreach $e (@entries) {
 	if ( -f "$source/$e"  && ( ($e =~ /\.wav$/) || ($e =~ /\.WAV$/) )  ) {
 	    moveAndRenameOneWavFile("$source/$e","$destination$newFolderName");
-	}
+	}  else {
+	    jybyPrint("Ignoring file '$e' in folder '$source'\n");	    
+    	}
     }
 
 }
@@ -315,16 +321,23 @@ sub updateContentOfDictaphone {
     my ($dataFolderOnComputer) = shift;
     my ($mount) = shift; 
     if( $debugLevel == 0 ) {
-	jybySystem("rsync -cr $dataFolderOnComputer/ $mount \n");
+	jybySystem("rsync -cr '$dataFolderOnComputer/' '$mount/Storage Media/' \n");
     } elsif( $debugLevel > 0 ) {
-	jybySystem("rsync -vcr $dataFolderOnComputer/ $mount \n");
+	jybySystem("rsync -vcr '$dataFolderOnComputer/' '$mount/Storage Media/' \n");
     }
 }
 
+sub mountDictaphone {
+    my ($mount) = shift;
+    # Mount the dictaphone
+    jybySystem("fusermount -u '".$mount."'\n");
+    jybySystem("jmtpfs '".$mount."'\n");
+}
 sub unmountDictaphone {
     my ($mount) = shift;
     # Umount the dictaphone
-    jybySystem("sudo umount '".$mount."'\n");
+    # jybySystem("sudo umount '".$mount."'\n");
+    jybySystem("fusermount -u '".$mount."'\n");
 }
 
 
