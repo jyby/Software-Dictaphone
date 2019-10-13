@@ -1,4 +1,12 @@
 #!/usr/bin/perl
+# + Examples of Usage:
+# ./processDictaphone.pl /media/WalkmanSony/Record/Voice/ ~/Unison/AudioNotesToProcess/
+# ./processDictaphone.pl 
+
+print "# Perl Script to Back-up audionotes from any USB dictaphone.\n";
+print "# by Jeremy Barbay\n";
+print "# Version last modified on [2019-10-13 Sun 18:40]\n";
+
 use strict;
 use warnings;
 use File::stat;            # To get the time and size of a file
@@ -9,21 +17,14 @@ use File::stat;            # To get the time and size of a file
 # + - rsynch the content of the folder $dataFolderOnComputer to the root of the dictaphone, and
 # + - unmount $mount.
 # + Given less parameters, take default values from right to left:
+my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $mount="/home/jbarbay/Mnt/Walkman/";
 my $source="Storage Media/Record/Voice";
 my $audioNotesFolderOnComputer = "/home/jbarbay/Unison/Boxes/MyBoxes/AudioNotesToProcess/";
 my $dataFolderOnComputer = "/home/jbarbay/Unison/References/DataForOtherDevices/Dictaphones";
-my $debugLevel=0; # 0=silent, 1=print and run all system calls, 2=only print system calls.
 my $logFile="/home/jbarbay/.audioNotes.log";
 my $maxSizeTransferEnMegabytes = 2048;
 
-# + Examples of Usage:
-# ./processDictaphone.pl /media/WalkmanSony/Record/Voice/ ~/Unison/AudioNotesToProcess/
-# ./processDictaphone.pl 
-
-print "# Perl Script to Back-up audionotes from any USB dictaphone.\n";
-print "# by Jeremy Barbay\n";
-print "# Version last modified on [2019-04-06 Sat 09:33]\n";
 
 # Recover the parameters: 
 if ( @ARGV == 0 ) {
@@ -203,14 +204,14 @@ sub moveAndRenameOneWavFile {
     my ($wday, $tmonth, $mday, $hour, $min, $sec, $year) 
 	= ($cdate =~ /(\w+)\s+(\w+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\d+)/) 
 	or die("Problem parsing creation date: $!!\n");
-    
+
     # translate textual month into digital value:
     my %mon2num = qw(jan 01 feb 02 mar 03 apr 04 may 05 jun 06 jul 07 aug 08 sep 09 oct 10 nov 11 dec 12); 
     my $month = $mon2num{ lc substr($tmonth, 0, 3) };
 
     # Build new name of File:
     my $baseNewFileName = ""; 
-    if( $month == 1 && $mday == 1 && $hour == 1 && $min == 0 && $sec == 0 ) {
+    if( $year = 1969 || ($month == 1 && $mday == 1 && $hour == 1 && $min == 0 && $sec == 0 )) {
       $baseNewFileName = compactDateFormat($backupDate)."_backup";
       jybyPrint("Dictaphone without date: Using the back up date '".$baseNewFileName."' for its name instead.\n");
     } else  {
@@ -330,14 +331,14 @@ sub updateContentOfDictaphone {
 sub mountDictaphone {
     my ($mount) = shift;
     # Mount the dictaphone
-    jybySystem("fusermount -u '".$mount."'\n");
-    jybySystem("jmtpfs '".$mount."'\n");
+    system("fusermount -u '".$mount."'\n");
+    system("jmtpfs '".$mount."'\n");
 }
 sub unmountDictaphone {
     my ($mount) = shift;
     # Umount the dictaphone
     # jybySystem("sudo umount '".$mount."'\n");
-    jybySystem("fusermount -u '".$mount."'\n");
+    system("fusermount -u '".$mount."'\n");
 }
 
 
