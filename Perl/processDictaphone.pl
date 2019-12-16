@@ -211,7 +211,7 @@ sub moveAndRenameOneWavFile {
 
     # Build new name of File:
     my $baseNewFileName = ""; 
-    if( $year = 1969 || ($month == 1 && $mday == 1 && $hour == 1 && $min == 0 && $sec == 0 )) {
+    if( $year == 1969 || ($month == 1 && $mday == 1 && $hour == 1 && $min == 0 && $sec == 0 )) {
       $baseNewFileName = compactDateFormat($backupDate)."_backup";
       jybyPrint("Dictaphone without date: Using the back up date '".$baseNewFileName."' for its name instead.\n");
     } else  {
