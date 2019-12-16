@@ -212,7 +212,6 @@ sub process_file {
 
 
 ###################################################################
-
 sub trackNbAudioNotesLeftToRead{
     my $AudioNotes = shift; # repertory containing the audionotes.
     my $absoluteTime = time;
@@ -263,6 +262,10 @@ sub trackNbAudioNotesLeftToRead{
     } 
     return $count;
 }
+
+
+
+
 
 sub estimateNbAudioNotesLeftToRead {
     my ($topdir) = shift; # repertory containing the audionotes.
